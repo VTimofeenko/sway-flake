@@ -1,5 +1,3 @@
-#!/run/current-system/sw/bin/zsh
-
 # Script that renames current workspace from (index) to (index): name
 # Also has some icons to suggest
 
