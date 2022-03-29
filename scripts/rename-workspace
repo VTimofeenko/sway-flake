@@ -2,7 +2,7 @@
 # Also has some icons to suggest
 
 # Some predefined icons
-ICONS=('' '' '' '')
+ICONS=('' '' '' '' '')
 
 NEW_NAME=$(echo "${(j:\n:)ICONS}" | bemenu\
         --tf 'TITLE_FOREGROUND_COLOR'\
