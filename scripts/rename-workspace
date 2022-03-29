@@ -1,0 +1,23 @@
+#!/run/current-system/sw/bin/zsh
+
+# Script that renames current workspace from (index) to (index): name
+# Also has some icons to suggest
+
+# Some predefined icons
+ICONS=('' '' '' '')
+
+NEW_NAME=$(echo "${(j:\n:)ICONS}" | bemenu\
+        --tf 'TITLE_FOREGROUND_COLOR'\
+        --hf 'HIGHLIGHTED_FOREGROUND_COLOR'\
+        --prompt "Rename workspace to"\
+        --list 5)
+WORKSPACE_JSON=$(swaymsg -r -t get_workspaces | jq -c '.[] | select(.focused == true)')
+WORKSPACE_NUM=$(echo $WORKSPACE_JSON | jq -c '.num')
+OLD_NAME=$(echo $WORKSPACE_JSON | jq -c '.name')
+
+if [[ $WORKSPACE_NUM == -1 ]]; then
+        swaymsg rename workspace $OLD_NAME to "${WORKSPACE_NUM}: ${NEW_NAME}"
+else
+        swaymsg rename workspace $OLD_NAME to "${WORKSPACE_NUM}: ${NEW_NAME}"
+fi
+
