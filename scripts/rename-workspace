@@ -5,8 +5,8 @@
 ICONS=('' '' '' '' '')
 
 NEW_NAME=$(echo "${(j:\n:)ICONS}" | bemenu\
-        --tf 'TITLE_FOREGROUND_COLOR'\
-        --hf 'HIGHLIGHTED_FOREGROUND_COLOR'\
+        --tf "$TITLE_FOREGROUND_COLOR"\
+        --hf "$HIGHLIGHTED_FOREGROUND_COLOR"\
         --prompt "Rename workspace to"\
         --list 5)
 WORKSPACE_JSON=$(swaymsg -r -t get_workspaces | jq -c '.[] | select(.focused == true)')

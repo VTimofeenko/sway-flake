@@ -43,9 +43,13 @@
               # Generate the new PATH by hand, declaring dependencies
               # There was an easier way to do this...
               export PATH=${prev.lib.concatStringsSep ":" (map (x: x+"/bin") [ prev.bemenu prev.jq prev.sway] )}:$PATH
+
+              # Declare colors, they will be used in the script itself
+              TITLE_FOREGROUND_COLOR="${color_table.dark-purple}"
+              HIGHLIGHTED_FOREGROUND_COLOR="${color_table.light-purple}"
               EOF
               # A bit hacky, but better than the escape headache
-              cat ${self}/scripts/rename-workspace | sed "s/TITLE_FOREGROUND_COLOR/${color_table.dark-purple}/" | sed "s/HIGHLIGHTED_FOREGROUND_COLOR/${color_table.light-purple}/" >> sway-rename-workspace
+              cat ${self}/scripts/rename-workspace >> sway-rename-workspace
               chmod +x sway-rename-workspace
             '';
 
