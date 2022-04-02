@@ -26,10 +26,8 @@
     in
 
     {
-
-      # A Nixpkgs overlay.
+      # Overlay containing custom packages and scripts
       overlay = final: prev: {
-
         sway-rename-workspace = with final; stdenv.mkDerivation rec {
           name = "sway-rename-workspace-${version}";
           unpackPhase = ":";
@@ -52,14 +50,12 @@
               cat ${self}/scripts/rename-workspace >> sway-rename-workspace
               chmod +x sway-rename-workspace
             '';
-
           installPhase =
             ''
               mkdir -p $out/bin
               cp sway-rename-workspace $out/bin/
             '';
         };
-
       };
 
       # Provide some binary packages for selected system types.
