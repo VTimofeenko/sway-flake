@@ -57,16 +57,5 @@
             '';
         };
       };
-
-      # Provide some binary packages for selected system types.
-      packages = forAllSystems (system:
-        {
-          inherit (nixpkgsFor.${system}) sway-rename-workspace;
-        });
-
-      # The default package for 'nix build'. This makes sense if the
-      # flake provides only one package or there is a clear "main"
-      # package.
-      defaultPackage = forAllSystems (system: self.packages.${system}.sway-rename-workspace);
     };
 }
