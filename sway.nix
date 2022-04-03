@@ -6,12 +6,13 @@ let
   # -k: show keyboard layout
   # -c: color
   lock_command = "${pkgs.swaylock}/bin/swaylock -fF -k -c 000000";
+  my_modifier = "Mod4";
 in
 {
-# These options are taken from https://nix-community.github.io/home-manager/options.html
+  # These options are taken from https://nix-community.github.io/home-manager/options.html
   wayland.windowManager.sway = {
     enable = true;
-# Assign windows to workspaces
+    # Assign windows to workspaces
     config = {
       assigns = {
         "mail" = [{ class = "^Thunderbird$"; }];
@@ -19,17 +20,17 @@ in
       /* # bars = {}; # TODO */
       /* # bindkeysToCode = true; # TODO */
       /* colors = {};  # TODO */
-# Criteria for floating windows
+      # Criteria for floating windows
       floating.criteria = [
         { class = "^Thunderbird$"; title=".* Reminder.*"; }
         { class = "Pavucontrol"; }
         { class = "Steam"; title="Friends List";}
       ];
-      gaps.smartBorders = true;
+      gaps.smartBorders = "on";
       # Input configuration
       input = {
         "type:keyboard" = {
-          kxb_layout = "us,ru";
+          xkb_layout = "us,ru";
           xkb_options = "grp:win_space_toggle";
         };
         "type:touchpad" = {
@@ -37,8 +38,13 @@ in
           pointer_accel = "0.4";
         };
       };
-# Custom keybindings
-      keybindings = let modifier = "$mod"; in lib.mkOptionDefault
+      # Output configuration
+      # TODO: make better
+      output = {
+        "eDP-1"= { "scale" = "1"; };
+      };
+      # Custom keybindings
+      keybindings = let modifier = my_modifier; in lib.mkOptionDefault
       {
         /* Launcher */
         "${modifier}+shift+r" = "exec ${pkgs.fuzzel}/bin/fuzzel";
@@ -46,8 +52,19 @@ in
         "${modifier}+Ctrl+q" = "exec ${lock_command}";
         /* Renaming script */
         "${modifier}+Ctrl+r" = "exec ${pkgs.sway-rename-workspace}/bin/sway-rename-workspace";
+        /* Custom workspace switching */
+        "${modifier}+z" = "workspace prev";
+        "${modifier}+x" = "workspace next";
+        "${modifier}+grave" = "workspace back_and_forth";
+        /* TODO: make this part laptop-specific */
+        /*Brightness down */
+        "XF86MonBrightnessDown" = "exec '${pkgs.brightnessctl}/bin/brightnessctl set 10%-'";
+        "F7" = "exec '${pkgs.brightnessctl}/bin/brightnessctl set 10%-'";
+        # Brightness up
+        "XF86MonBrightnessUp" = "exec '${pkgs.brightnessctl}/bin/brightnessctl set +10%'";
+        "F8" = "exec '${pkgs.brightnessctl}/bin/brightnessctl set +10%'";
       };
-      modifier = "Mod4";
+      modifier = my_modifier;
       seat = { "*" = { hide_cursor = "when-typing enable"; } ; };
       /* startup = []; # TODO: maybe xremap here? */
       terminal = "${pkgs.kitty}/bin/kitty";
@@ -56,9 +73,9 @@ in
         { command = "kill"; criteria = { class = "Steam"; title = "Steam - News.*"; }; }
       ];
       workspaceAutoBackAndForth = true;
-      swaynag.enable = true;
-      wrapperFeatures = { gtk = true; };
+      # swaynag.enable = true;  # Available only on unstable as of Apr 3 2022
     };
+    wrapperFeatures = { gtk = true; };
     extraConfig = ''
       for_window [class="Firefox"] inhibit_idle fullscreen
       for_window [class="Brave-browser"] inhibit_idle fullscreen
@@ -68,10 +85,10 @@ in
     enable = true;
     systemd = {
       enable = true;
-      target = "sway-session.target";
+      # target = "sway-session.target"; # Available only on unstable as of Apr 3 2022
     };
   };
-  services.swayidle = {
+  /* services.swayidle = {
     enable = true;
     events = [
     { event = "before-sleep"; command = "${lock_command}"; }
@@ -83,7 +100,8 @@ in
     { timout = 600; command = "${lock_command}"; }
     { timout = 1200; command = "${pkgs.sway}/bin/swaymsg 'output * dpms off'"; }
     ];
-  };
+  };  # TODO: available only on unstable as of Apr 3 2022
+  */
   home.packages = with pkgs; [
     wl-clipboard
     mako

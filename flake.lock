@@ -1,12 +1,45 @@
 {
   "nodes": {
+    "home-manager": {
+      "inputs": {
+        "nixpkgs": "nixpkgs"
+      },
+      "locked": {
+        "lastModified": 1648834319,
+        "narHash": "sha256-i5Aj4Aw64D/A0X6XW5LxSS4XBnYj7gMz+kN4dpsbdk8=",
+        "owner": "rycee",
+        "repo": "home-manager",
+        "rev": "0bdbdea2e26c984b096f4f7d10e3c88536a980b0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "rycee",
+        "ref": "release-21.11",
+        "repo": "home-manager",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1648203577,
-        "narHash": "sha256-CbXZkiVTA0ByV/yncFHCAGIa/AfcSb0cjqzEa56rO+Y=",
+        "lastModified": 1648219316,
+        "narHash": "sha256-Ctij+dOi0ZZIfX5eMhgwugfvB+WZSrvVNAyAuANOsnQ=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "d89f18a17e51532ed5f4d45297b0ddf11e46b9c8",
+        "rev": "30d3d79b7d3607d56546dd2a6b49e156ba0ec634",
+        "type": "github"
+      },
+      "original": {
+        "id": "nixpkgs",
+        "type": "indirect"
+      }
+    },
+    "nixpkgs_2": {
+      "locked": {
+        "lastModified": 1648965846,
+        "narHash": "sha256-xaO0KS+sgZLYrhaQNjVe6eRcOUIM1mEkAjT+dRbPblU=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "0aac710801aec4ba545527cf41a5706028fe6271",
         "type": "github"
       },
       "original": {
@@ -17,13 +50,14 @@
     },
     "root": {
       "inputs": {
-        "nixpkgs": "nixpkgs",
+        "home-manager": "home-manager",
+        "nixpkgs": "nixpkgs_2",
         "vt-colors": "vt-colors"
       }
     },
     "vt-colors": {
       "locked": {
-        "narHash": "sha256-QMCAjEWcFYOENTPW1Dmrf2+y2AmBdJUiLvOzxhsIyqc=",
+        "narHash": "sha256-pDRx6NkD9qW8FY/AHzk3SaRktqre0rzCgqY603LtBhc=",
         "path": "/home/spacecadet/Documents/projects/vt-colors",
         "type": "path"
       },
