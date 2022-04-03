@@ -60,5 +60,6 @@
         };
       };
       nixosModule = import ./sway.nix;
+      nixosModules.system = import ./system_module.nix;
     };
 }
