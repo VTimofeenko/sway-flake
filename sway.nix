@@ -81,6 +81,48 @@ in
       for_window [class="Brave-browser"] inhibit_idle fullscreen
     '';
   };
+  # swayidle service, used as a w/a
+  # Original here: https://github.com/swaywm/sway/wiki/Systemd-integration#swayidle
+  /* [Unit] */
+/* Description=Idle manager for Wayland */
+/* Documentation=man:swayidle(1) */
+/* PartOf=graphical-session.target */
+
+/* [Service] */
+/* Type=simple */
+/* ExecStart=/usr/bin/swayidle -w \ */
+  /*           timeout 300 'swaylock -f -c 000000' \ */
+  /*           timeout 600 'swaymsg "output * dpms off"' \ */
+  /*               resume 'swaymsg "output * dpms on"' \ */
+  /*           before-sleep 'swaylock -f -c 000000' */
+
+/* [Install] */
+/* WantedBy=sway-session.target */
+  systemd.user.services = {
+   swayidle = {
+    Unit = {
+      Description = "Idle manager for Wayland";
+      Documentation = [ "man:swayidle(1)" ];
+      PartOf = [ "graphical-session.target" ];
+    };
+
+    Service = {
+      Type = "simple";
+      ExecStart=''
+      ${pkgs.swayidle}/bin/swayidle -w \
+          timeout 600 '${lock_command}' \
+          timeout 600 'swaymsg "output * dpms off"' \
+          resume 'swaymsg "output * dpms on"' \
+          before-sleep '${lock_command}'
+      '';
+    };
+    Install = {
+      WantedBy = [ "graphical-session.target" ];
+    };
+  };
+
+  };
+
   programs.waybar = {
     enable = true;
     systemd = {
@@ -90,7 +132,7 @@ in
     settings = [ {
       /* Waybar config. */
       /* Default is here: https://github.com/Alexays/Waybar/blob/master/resources/config */
-      layer = "top";
+      layer = "bottom";
       position = "top";
       height = 30;
       /* TODO: laptop-specific */
