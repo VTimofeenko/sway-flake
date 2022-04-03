@@ -1,11 +1,12 @@
 {
-  description = "An over-engineered Hello World in bash";
+  description = "Nix flake that contains my sway config";
 
   # Nixpkgs / NixOS version to use.
   inputs.nixpkgs.url = "nixpkgs/nixos-21.11";
   inputs.vt-colors.url = "path:/home/spacecadet/Documents/projects/vt-colors";
+  inputs.home-manager.url = "github:rycee/home-manager/release-21.11";
 
-  outputs = { self, nixpkgs, vt-colors }:
+  outputs = { self, nixpkgs, vt-colors, home-manager }:
     let
 
       # to work with older version of flakes
@@ -28,6 +29,7 @@
     {
       # Overlay containing custom packages and scripts
       overlay = final: prev: {
+        # Script that renames works
         sway-rename-workspace = with final; stdenv.mkDerivation rec {
           name = "sway-rename-workspace-${version}";
           unpackPhase = ":";
@@ -57,5 +59,6 @@
             '';
         };
       };
+      nixosModule = import ./sway.nix;
     };
 }
