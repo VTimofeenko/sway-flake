@@ -39,7 +39,7 @@ in
         };
       };
       # Output configuration
-      # TODO: make better
+      # TODO: laptop-specific
       output = {
         "eDP-1"= { "scale" = "1"; };
       };
