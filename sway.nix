@@ -102,25 +102,26 @@ in
 /* [Install] */
 /* WantedBy=sway-session.target */
   systemd.user.services = {
-   swayidle = {
-    Unit = {
-      Description = "Idle manager for Wayland";
-      Documentation = [ "man:swayidle(1)" ];
-      PartOf = [ "graphical-session.target" ];
-    };
+    swayidle = {
+      Unit = {
+        Description = "Idle manager for Wayland";
+        Documentation = [ "man:swayidle(1)" ];
+        PartOf = [ "graphical-session.target" ];
+      };
 
-    Service = {
-      Type = "simple";
-      ExecStart=''
-      ${pkgs.swayidle}/bin/swayidle -w \
-          timeout 600 '${lock_command}' \
-          timeout 600 'swaymsg "output * dpms off"' \
-          resume 'swaymsg "output * dpms on"' \
-          before-sleep '${lock_command}'
-      '';
-    };
-    Install = {
-      WantedBy = [ "graphical-session.target" ];
+      Service = {
+        Type = "simple";
+        ExecStart=''
+          ${pkgs.swayidle}/bin/swayidle -w \
+            timeout 600 '${lock_command}' \
+            timeout 600 'swaymsg "output * dpms off"' \
+            resume 'swaymsg "output * dpms on"' \
+            before-sleep '${lock_command}'
+          '';
+      };
+      Install = {
+        WantedBy = [ "graphical-session.target" ];
+      };
     };
   };
 
