@@ -29,7 +29,7 @@
     {
       # Overlay containing custom packages and scripts
       overlay = final: prev: {
-        # Script that renames works
+        # Script that renames workspaces
         sway-rename-workspace = with final; stdenv.mkDerivation rec {
           name = "sway-rename-workspace-${version}";
           unpackPhase = ":";
