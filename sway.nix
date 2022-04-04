@@ -75,10 +75,17 @@ in
         # Brightness up
         "XF86MonBrightnessUp" = "exec '${pkgs.brightnessctl}/bin/brightnessctl set +10%'";
         "F8" = "exec '${pkgs.brightnessctl}/bin/brightnessctl set +10%'";
+        "${modifier}+shift+p" = "exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'systemctl --user stop graphical-session.target app.slice && swaymsg exit'";
       };
       modifier = my_modifier;
       seat = { "*" = { hide_cursor = "when-typing enable"; } ; };
-      /* startup = []; # TODO: maybe xremap here? */
+      startup = [
+        /* Stop the graphical-session first if it is running.
+        It will be restarted by subsequent start of sway-session.target. */
+        { command = "systemctl --user stop sway-session.target"; }
+        { command = "systemctl restart xremap.service"; }
+        # { command = "mako"; }
+      ];
       terminal = "${pkgs.kitty}/bin/kitty";
       # Default commands to execute
       window.commands = [
