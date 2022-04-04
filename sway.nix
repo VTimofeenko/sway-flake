@@ -11,6 +11,7 @@ in
 {
   imports = [
     ./modules/waybar.nix
+    ( import ./modules/mako.nix ( { inherit vt-colors; }) )
   ];
   # These options are taken from https://nix-community.github.io/home-manager/options.html
   wayland.windowManager.sway = {
