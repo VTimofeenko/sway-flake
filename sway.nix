@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ pkgs, lib, vt-colors, ... }:
 
 let
   # -f: daemonize
@@ -23,6 +23,15 @@ in
       bars = [];  # Set to empty to disable the default. Waybar is managed separately.
       /* # bindkeysToCode = true; # TODO */
       /* colors = {};  # TODO */
+      colors = {
+        focused = {
+          background = "#5f676a";
+          border = vt-colors.colors_named.primary_selection;
+          childBorder = vt-colors.colors_named.primary_selection;
+          indicator = vt-colors.colors_raw.light-purple;
+          text = "#ffffff";
+        };
+      };
       # Criteria for floating windows
       floating.criteria = [
         { class = "^Thunderbird$"; title=".* Reminder.*"; }

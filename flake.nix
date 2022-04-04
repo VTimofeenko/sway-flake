@@ -59,7 +59,12 @@
             '';
         };
       };
+      /* Note:
+      To import this module, it's necessary to use something like
+      home-manager.users.username = {this_flake}.nixosModule { inherit vt-colors pkgs ; inherit (pkgs) lib; };
+      */
       nixosModule = import ./sway.nix;
+
       nixosModules.system = import ./system_module.nix;
     };
 }
