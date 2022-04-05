@@ -1,4 +1,8 @@
-{ pkgs, lib, vt-colors, ... }:
+/*
+The first line is written this way to be able to explicitly associate "inputs" with the _flake_'s inputs.
+Otherwise when using this module in the system configuration - system configuration tries to provide the inputs and an error is thrown about missing parameters.'
+*/
+inputs: { pkgs, lib, ... }:
 
 let
   # -f: daemonize
@@ -7,11 +11,19 @@ let
   # -c: color
   lock_command = "${pkgs.swaylock}/bin/swaylock -fF -k -c 000000";
   my_modifier = "Mod4";
+  /* This bit of black magic uses 'mkSchemeAttrs' function from base16 while ensuring that proper pkgs and lib are inherited. With the way 'inputs' are being used (see comment at the beginning) this allows to control which parameter is used from flake, which – from the rest of configuration.
+  */
+  scheme = (inputs.base16.outputs.lib {inherit pkgs lib;}).mkSchemeAttrs "${inputs.base16-atlas-scheme}/atlas.yaml";
+  inherit inputs;
 in
 {
+  # inherit test;
   imports = [
     ./modules/waybar.nix
-    ( import ./modules/mako.nix ( { inherit vt-colors; }) )
+    (
+      /* This is a way to pull arguments through when importing a module. Logic is similar to the comments above */
+      import ./modules/mako.nix ( { inherit (inputs) base16 base16-atlas-scheme base16-mako; })
+    )
   ];
   # These options are taken from https://nix-community.github.io/home-manager/options.html
   wayland.windowManager.sway = {
@@ -24,15 +36,15 @@ in
       bars = [];  # Set to empty to disable the default. Waybar is managed separately.
       /* # bindkeysToCode = true; # TODO */
       /* colors = {};  # TODO */
-      colors = {
-        focused = {
-          background = "#5f676a";
-          border = vt-colors.colors_named.primary_selection;
-          childBorder = vt-colors.colors_named.primary_selection;
-          indicator = vt-colors.colors_raw.light-purple;
-          text = "#ffffff";
-        };
-      };
+      /* colors = { */
+      /*   focused = { */
+      /*     background = "#5f676a"; */
+      /*     border = vt-colors.colors_named.primary_selection; */
+      /*     childBorder = vt-colors.colors_named.primary_selection; */
+      /*     indicator = vt-colors.colors_raw.light-purple; */
+      /*     text = "#ffffff"; */
+      /*   }; */
+      /* }; */
       # Criteria for floating windows
       floating.criteria = [
         { class = "^Thunderbird$"; title=".* Reminder.*"; }
@@ -99,25 +111,15 @@ in
     extraConfig = ''
       for_window [class="Firefox"] inhibit_idle fullscreen
       for_window [class="Brave-browser"] inhibit_idle fullscreen
-    '';
+      '' + (with scheme; ''
+      client.focused          ${base05} ${base0D} ${base00} ${base0D} ${base0D}
+      client.focused_inactive ${base01} ${base01} ${base05} ${base03} ${base01}
+      client.unfocused        ${base01} ${base00} ${base05} ${base01} ${base01}
+      client.urgent           ${base08} ${base08} ${base00} ${base08} ${base08}
+      client.placeholder      ${base00} ${base00} ${base05} ${base00} ${base00}
+      client.background       ${base07}
+    '');
   };
-  # swayidle service, used as a w/a
-  # Original here: https://github.com/swaywm/sway/wiki/Systemd-integration#swayidle
-  /* [Unit] */
-/* Description=Idle manager for Wayland */
-/* Documentation=man:swayidle(1) */
-/* PartOf=graphical-session.target */
-
-/* [Service] */
-/* Type=simple */
-/* ExecStart=/usr/bin/swayidle -w \ */
-  /*           timeout 300 'swaylock -f -c 000000' \ */
-  /*           timeout 600 'swaymsg "output * dpms off"' \ */
-  /*               resume 'swaymsg "output * dpms on"' \ */
-  /*           before-sleep 'swaylock -f -c 000000' */
-
-/* [Install] */
-/* WantedBy=sway-session.target */
   systemd.user.services = {
     swayidle = {
       Unit = {
@@ -162,6 +164,5 @@ in
     kitty
     dmenu
     fuzzel
-# waybar
   ];
 }

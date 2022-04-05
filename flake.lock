@@ -1,5 +1,57 @@
 {
   "nodes": {
+    "base16": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1643556194,
+        "narHash": "sha256-mU/pD30cIRcodLROhbIpRuEoEsO9aV5lDrYav0ZSIUA=",
+        "owner": "SenchoPens",
+        "repo": "base16.nix",
+        "rev": "abc25e69d0e18ce54dbe6d95a531c4d63ed59932",
+        "type": "github"
+      },
+      "original": {
+        "owner": "SenchoPens",
+        "repo": "base16.nix",
+        "type": "github"
+      }
+    },
+    "base16-atlas-scheme": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1538613261,
+        "narHash": "sha256-l0WzTUSvLgsL+ExcgdMzXoJnfVQvKr8Jk5uKI6Li8CU=",
+        "owner": "ajlende",
+        "repo": "base16-atlas-scheme",
+        "rev": "55fe308a8d93a31c1bd55e80ff573b11511b6cf3",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ajlende",
+        "repo": "base16-atlas-scheme",
+        "type": "github"
+      }
+    },
+    "base16-mako": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1584466459,
+        "narHash": "sha256-83csG/gORJlPg9sOlOeWgAH9KYgt+cgrJJNXMuIaVBQ=",
+        "owner": "stacyharper",
+        "repo": "base16-mako",
+        "rev": "f46c99682c03d30f52436741f1902db36738bf06",
+        "type": "github"
+      },
+      "original": {
+        "owner": "stacyharper",
+        "repo": "base16-mako",
+        "type": "github"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": "nixpkgs"
@@ -50,6 +102,9 @@
     },
     "root": {
       "inputs": {
+        "base16": "base16",
+        "base16-atlas-scheme": "base16-atlas-scheme",
+        "base16-mako": "base16-mako",
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs_2",
         "vt-colors": "vt-colors"
