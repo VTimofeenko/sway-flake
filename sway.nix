@@ -19,7 +19,9 @@ in
 {
   # inherit test;
   imports = [
-    ./modules/waybar.nix
+    (
+     import ./modules/waybar.nix ( { inherit (inputs) base16 base16-atlas-scheme base16-waybar; inherit scheme; })
+    )
     (
       /* This is a way to pull arguments through when importing a module. Logic is similar to the comments above */
       import ./modules/mako.nix ( { inherit (inputs) base16 base16-atlas-scheme base16-mako; })

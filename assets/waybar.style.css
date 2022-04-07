@@ -1,0 +1,149 @@
+* {
+    /* `otf-font-awesome` is required to be installed for icons */
+    /* font-family: FontAwesome, Roboto, Helvetica, Arial, sans-serif; */
+    font-size: 13px;
+}
+
+.modules-left {
+        background: linear-gradient(90deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.5) 28%, rgba(255,255,255,0.01) 100%);
+        /* Taken as a third of the screen */
+        min-width: 752px;
+}
+
+.modules-left > widget:first-child > #workspaces {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+window#waybar {
+    transition-property: background-color;
+    transition-duration: .5s;
+    background: rgba(0,0,0,0.1);
+}
+
+window#waybar.hidden {
+    opacity: 0.2;
+}
+
+#workspaces button {
+    padding: 0 5px;
+    background-color: transparent;
+    color: @base06;
+    /* Use box-shadow instead of border so the text isn't offset */
+    box-shadow: inset 0 -3px transparent;
+    /* Avoid rounded borders under each workspace name */
+    border: none;
+    border-radius: 0;
+}
+
+/* https://github.com/Alexays/Waybar/wiki/FAQ#the-workspace-buttons-have-a-strange-hover-effect */
+#workspaces button:hover {
+    background: rgba(0, 0, 0, 0.2);
+    box-shadow: inset 0 -3px @base02;
+}
+
+#workspaces button.focused {
+    background: rgba(0, 0, 0, 0.25);
+    box-shadow: inset 0 -4px @base02;
+}
+
+#workspaces button.urgent {
+    background-color: @base08;
+}
+
+#mode {
+    border-bottom: 3px solid @base0E;
+}
+
+#clock,
+#battery,
+#cpu,
+#memory,
+#disk,
+#temperature,
+#backlight,
+#network,
+#pulseaudio,
+#custom-media,
+#tray,
+#mode,
+#idle_inhibitor,
+#mpd {
+    padding: 0 10px;
+}
+
+#window,
+#workspaces {
+    margin: 0 4px;
+}
+
+/* Custom stuff here */
+/* To make a nice round border, uncomment below */
+/* .modules-right {
+        border: 2px solid @base01;
+        border-radius: 10px;
+        margin-top: 3px;
+        margin-right: 7px;
+        margin-bottom: 3px;
+        min-height: 25px;
+        background: @base00;
+}
+*/
+.modules-right {
+        background: linear-gradient(-90deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.5) 28%, rgba(255,255,255,0.01) 100%);
+        min-width: 752px;
+
+}
+.modules-right * {
+        color: @base06;
+}
+
+@keyframes blink {
+    to {
+        background-color: @base06;
+        color: @base00;
+    }
+}
+
+#battery.critical:not(.charging) {
+    background-color: @base08;
+    color: @base00;
+    animation-name: blink;
+    animation-duration: 0.5s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+label:focus {
+    background-color: #000000;
+}
+
+#network.disconnected {
+    background-color: @base08;
+}
+
+#temperature.critical {
+    background-color: @base08;
+}
+
+#tray > .passive {
+    -gtk-icon-effect: dim;
+}
+
+#tray > .needs-attention {
+    -gtk-icon-effect: highlight;
+    background-color: @base0F;
+}
+
+#idle_inhibitor.activated {
+    color: @base02;
+    background: rgba(0, 0, 0, 0.25);
+    box-shadow: inset 0 -4px @base02;
+}
+
+#language {
+    padding: 0 5px;
+    margin: 0 5px;
+    min-width: 16px;
+}

@@ -17,6 +17,10 @@
       url = "github:stacyharper/base16-mako";
       flake = false;
     };
+    base16-waybar = {
+      url = "github:mnussbaum/base16-waybar";
+      flake = false;
+    };
     /* Not needed, very little in the repo */
     /* base16- = { */
     /*   url = "github:rkubosz/base16-sway"; */

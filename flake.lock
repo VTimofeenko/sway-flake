@@ -52,6 +52,22 @@
         "type": "github"
       }
     },
+    "base16-waybar": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1546831770,
+        "narHash": "sha256-ehb4CLLPJ/SjMz53/inuP9ine2CfIpexp2O1lVHihM0=",
+        "owner": "mnussbaum",
+        "repo": "base16-waybar",
+        "rev": "d2f943b1abb9c9f295e4c6760b7bdfc2125171d2",
+        "type": "github"
+      },
+      "original": {
+        "owner": "mnussbaum",
+        "repo": "base16-waybar",
+        "type": "github"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": "nixpkgs"
@@ -105,6 +121,7 @@
         "base16": "base16",
         "base16-atlas-scheme": "base16-atlas-scheme",
         "base16-mako": "base16-mako",
+        "base16-waybar": "base16-waybar",
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs_2",
         "vt-colors": "vt-colors"

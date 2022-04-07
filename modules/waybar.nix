@@ -1,5 +1,16 @@
-{ pkgs, ... }:
+inputs: { pkgs, ... }:
 
+let
+  /* template = (inputs.base16.outputs.lib {inherit pkgs lib;}).mkSchemeAttrs */
+  /*   # The color scheme */
+  /*   "${inputs.base16-atlas-scheme}/atlas.yaml" */
+  /*   # The template */
+  /*   inputs.base16-mako; */
+  template = inputs.scheme inputs.base16-waybar;
+  /* Function that turns an icon into a <span> to force a specific font */
+  /* TODO: add proper dep for the font? */
+  mkSpan = icon: "<span font=\"Font Awesome 5 Free Solid\">${icon}</span>";
+in
 {
   programs.waybar = {
     enable = true;
@@ -14,17 +25,20 @@
       position = "top";
       height = 30;
       /* TODO: laptop-specific */
-      output = [
-        "eDP-1"
-      ];
+      output = [ "eDP-1" ];
       modules-left = [ "sway/workspaces" "sway/mode" ];
-      modules-center = [ "sway/window" ];
-      modules-right = [ "idle_inhibitor" "pulseaudio" "network" "cpu" "memory" "temperature" "backlight" "sway/language" "battery" "clock" "tray" ];
+      modules-center = [ ];
+      modules-right = [ "tray" "idle_inhibitor" "pulseaudio" "network" "temperature" "cpu" "sway/language" "battery" "clock" ];
 
       modules = {
         "sway/workspaces" = {
           disable-scroll = true;
           all-outputs = true;
+        };
+        "clock" = {
+          /* "-d" removes leading zero */
+          "format" = "{:%b %-d %R}";
+          "tooltip" = false;
         };
         "sway/mode"= {
           "format" = "<span style=\"italic\">{}</span>";
@@ -32,55 +46,47 @@
         "idle_inhibitor" = {
           "format" = "{icon}";
           "format-icons" = {
-            "activated" = "☕";
-            "deactivated" = "☕";
+            "activated" = mkSpan "";
+            "deactivated" = mkSpan "";
           };
         };
         "temperature" = {
           /* # TODO laptop-specific */
           "thermal-zone" = 3;
           "critical-threshold" = 80;
-          "format-critical" = "{temperatureC}°C {icon}";
-          "format" = "{temperatureC}°C {icon}";
+          "format-critical" = mkSpan "{icon}" + " {temperatureC}°C";
+          "format" = mkSpan "{icon}" + " {temperatureC}°C";
           "format-icons" = ["" "" ""];
         };
         "cpu" = {
-          "format" = "{usage}% ";
+          "format" = mkSpan "" + " {usage}%";
           "tooltip" = false;
-        };
-        "memory" = {
-          "format" = "{}% ";
-        };
-        "backlight" = {
-          "format" = "{percent}% {icon}";
-          "format-icons" = ["" "" "" "" "" "" "" "" ""];
         };
         "battery" = {
           "states" = {
-            /* "good" = 95 */
+            "good" = 95;
             "warning" = 30;
             "critical" = 15;
           };
-          "format" = "{capacity}% {icon}";
-          "format-charging" = "{capacity}% ";
-          "format-plugged" = "{capacity}% ";
-          "format-alt" = "{time} {icon}";
+          "format" = mkSpan "{icon}" + " {capacity}%";
+          "format-charging" = mkSpan "{icon}" + " {capacity}% " + mkSpan "";
+          "format-plugged" = mkSpan "{icon}" + " {capacity}% " + mkSpan "";
+          "format-alt" = "{time} " + mkSpan "{icon}";
           "format-icons" = ["" "" "" "" ""];
         };
         "network" = {
-          "format-wifi" = "{essid} ({signalStrength}%) ";
-          "format-ethernet" = "{ipaddr}/{cidr} ";
+          "format-wifi" = mkSpan " " + " {essid}";
+          "format-ethernet" = mkSpan "" + " {ipaddr}";
           "tooltip-format" = "{ifname} via {gwaddr} ";
-          "format-linked" = "{ifname} (No IP) ";
-          "format-disconnected" = "Disconnected ⚠";
-          "format-alt" = "{ifname} = {ipaddr}/{cidr}";
+          "format-linked" = "{ifname} (No IP)";
+          "format-disconnected" = mkSpan "⚠" + " Disconnected";
         };
         "pulseaudio" = {
-          "format" = "{volume}% {icon} {format_source}";
+          "format" =  mkSpan "{icon}" + " {volume}%";
           "format-bluetooth" = "{volume}% {icon} {format_source}";
           "format-bluetooth-muted" = " {icon} {format_source}";
-          "format-muted" = " {format_source}";
-          "format-source" = "{volume}% ";
+          "format-muted" = "";
+          "format-source" = "";
           "format-source-muted" = "";
           "format-icons" = {
             "headphone" = "";
@@ -95,5 +101,10 @@
         };
       };
     } ];
+    style = ''
+      ${builtins.readFile template}
+      ${builtins.readFile ../assets/waybar.style.css}
+
+    '';
   };
 }
