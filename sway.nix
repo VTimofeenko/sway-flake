@@ -70,6 +70,15 @@ in
       output = {
         "eDP-1"= { "scale" = "1"; };
       };
+      modes = lib.mkOptionDefault {
+        resize = {
+          "Shift+h" = "resize shrink width 100 px";
+          "Shift+j" = "resize grow height 100 px";
+          "Shift+k" = "resize shrink height 100 px";
+          "Shift+l" = "resize grow width 100 px";
+        };
+
+      };
       # Custom keybindings
       keybindings = let modifier = my_modifier; in lib.mkOptionDefault
       {
