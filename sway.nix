@@ -14,6 +14,7 @@ let
   /* This bit of black magic uses 'mkSchemeAttrs' function from base16 while ensuring that proper pkgs and lib are inherited. With the way 'inputs' are being used (see comment at the beginning) this allows to control which parameter is used from flake, which – from the rest of configuration.
   */
   scheme = (inputs.base16.outputs.lib {inherit pkgs lib;}).mkSchemeAttrs "${inputs.base16-atlas-scheme}/atlas.yaml";
+  my_terminal = "${pkgs.kitty}/bin/kitty";
   inherit inputs;
 in
 {
@@ -110,7 +111,7 @@ in
         { command = "systemctl restart xremap.service"; }
         # { command = "mako"; }
       ];
-      terminal = "${pkgs.kitty}/bin/kitty";
+      terminal = "${my_terminal}";
       # Default commands to execute
       window.commands = [
         { command = "kill"; criteria = { class = "Steam"; title = "Steam - News.*"; }; }
@@ -129,7 +130,10 @@ in
       client.urgent           ${base08} ${base08} ${base00} ${base08} ${base08}
       client.placeholder      ${base00} ${base00} ${base05} ${base00} ${base00}
       client.background       ${base07}
-    '');
+    '') + ''
+      for_window [title="scratchpad_term"] floating enable, move scratchpad
+      bindsym ${my_modifier}+Shift+Return exec --no-startup-id ${pkgs.scratchpad_terminal}/bin/scratchpad_terminal ${my_terminal} "scratchpad_term"
+    '';
   };
   systemd.user.services = {
     swayidle = {

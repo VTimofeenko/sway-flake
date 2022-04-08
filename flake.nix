@@ -81,6 +81,35 @@
               cp sway-rename-workspace $out/bin/
             '';
         };
+        /* A script that shows a scratchpad terminal
+        Script that checks if scratchpad terminal is running.
+        If it is - show scratchpad
+        If it is not - launch it and show
+        Accepts terminal as the first parameter
+        Accepts terminal title as the second parameter
+
+        For sway-related config, see sway.nix
+        */
+        scratchpad_terminal = let pkg_name = "scratchpad_terminal"; in with final; stdenv.mkDerivation rec {
+          name = "${pkg_name}-${version}";
+          unpackPhase = ":";
+          buildPhase = ''
+            cat > ${pkg_name} <<EOF
+            #!${prev.zsh}/bin/zsh
+            export PATH=${prev.lib.concatStringsSep ":" (map (x: x+"/bin") [ prev.sway prev.libnotify ] )}:$PATH
+            export IPC_CMD="swaymsg"
+            EOF
+            cat ${self}/scripts/${pkg_name} >> ${pkg_name}
+            chmod +x ${pkg_name}
+          '';
+          installPhase =
+            ''
+              mkdir -p $out/bin
+              cp ${pkg_name} $out/bin/
+            '';
+
+        };
+
       };
       /* Note:
       To import this module, it's necessary to use something like
