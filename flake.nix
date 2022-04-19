@@ -3,7 +3,6 @@
 
   inputs = {
     nixpkgs.url = "nixpkgs/nixos-21.11";
-    vt-colors.url = "path:/home/spacecadet/Documents/projects/vt-colors";
     home-manager.url = "github:rycee/home-manager/release-21.11";
     # Colors
     base16.url = "github:SenchoPens/base16.nix";
@@ -29,7 +28,7 @@
   };
 
 
-  outputs = { self, nixpkgs, vt-colors, home-manager, ... }@inputs:
+  outputs = { self, nixpkgs, home-manager, ... }@inputs:
     let
 
       # to work with older version of flakes
