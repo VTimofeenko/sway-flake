@@ -2,6 +2,9 @@
 { pkgs, ... }:
 
 {
+  imports = [
+    ./modules/greetd.nix
+  ];
   # Swaylock requires this
   # TODO: maybe not needed
   security.pam.services.swaylock = {
