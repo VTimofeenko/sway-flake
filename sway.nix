@@ -10,7 +10,7 @@ let
   # -k: show keyboard layout
   # -c: color
   lock_command = "${pkgs.swaylock}/bin/swaylock -fF -k -c 000000";
-  my_modifier = "Mod4";
+  my_modifier = "Mod1";
   /* This bit of black magic uses 'mkSchemeAttrs' function from base16 while ensuring that proper pkgs and lib are inherited. With the way 'inputs' are being used (see comment at the beginning) this allows to control which parameter is used from flake, which – from the rest of configuration.
   */
   scheme = (inputs.base16.outputs.lib {inherit pkgs lib;}).mkSchemeAttrs "${inputs.base16-atlas-scheme}/atlas.yaml";
@@ -123,7 +123,6 @@ in
         /* Stop the graphical-session first if it is running.
         It will be restarted by subsequent start of sway-session.target. */
         { command = "systemctl --user stop sway-session.target"; }
-        { command = "systemctl restart xremap.service"; }
         { command = "${set_gsettings}"; }
         # { command = "mako"; }
       ];
