@@ -45,7 +45,6 @@
 
       # Nixpkgs instantiated for supported system types.
       nixpkgsFor = forAllSystems (system: import nixpkgs { inherit system; overlays = [ self.overlay ]; });
-      color_table = vt-colors.colors_raw;
     in
 
     {
@@ -67,8 +66,8 @@
               export PATH=${prev.lib.concatStringsSep ":" (map (x: x+"/bin") [ prev.bemenu prev.jq prev.sway] )}:$PATH
 
               # Declare colors, they will be used in the script itself
-              TITLE_FOREGROUND_COLOR="${color_table.dark-purple}"
-              HIGHLIGHTED_FOREGROUND_COLOR="${color_table.light-purple}"
+              TITLE_FOREGROUND_COLOR="#685da2"
+              HIGHLIGHTED_FOREGROUND_COLOR="#a89dd7"
               EOF
               # A bit hacky, but better than the escape headache
               cat ${self}/scripts/rename-workspace >> sway-rename-workspace
