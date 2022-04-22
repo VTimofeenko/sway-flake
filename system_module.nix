@@ -13,4 +13,5 @@
   # According to https://blog.patapon.info/nixos-systemd-sway/ this restores a bunch of stuff
   programs.sway.enable = true;
   programs.dconf.enable = true;
+  hardware.opengl.enable = true;
 }
