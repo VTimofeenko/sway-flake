@@ -124,6 +124,9 @@ in
         It will be restarted by subsequent start of sway-session.target. */
         { command = "systemctl --user stop sway-session.target"; }
         { command = "${set_gsettings}"; }
+        {
+          command = "swaybg --image /run/current-system/sw/share/backgrounds/sway/Sway_Wallpaper_Blue_768x1024.png --mode fill";
+        }
         # { command = "mako"; }
       ];
       terminal = "${my_terminal}";
@@ -194,5 +197,6 @@ in
     kitty
     dmenu
     fuzzel
+    swaybg
   ];
 }
