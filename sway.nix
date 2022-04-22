@@ -1,6 +1,6 @@
 /*
-The first line is written this way to be able to explicitly associate "inputs" with the _flake_'s inputs.
-Otherwise when using this module in the system configuration - system configuration tries to provide the inputs and an error is thrown about missing parameters.'
+  The first line is written this way to be able to explicitly associate "inputs" with the _flake_'s inputs.
+  Otherwise when using this module in the system configuration - system configuration tries to provide the inputs and an error is thrown about missing parameters.'
 */
 inputs: { pkgs, lib, ... }:
 
@@ -13,33 +13,33 @@ let
   my_modifier = "Mod1";
   /* This bit of black magic uses 'mkSchemeAttrs' function from base16 while ensuring that proper pkgs and lib are inherited. With the way 'inputs' are being used (see comment at the beginning) this allows to control which parameter is used from flake, which – from the rest of configuration.
   */
-  scheme = (inputs.base16.outputs.lib {inherit pkgs lib;}).mkSchemeAttrs "${inputs.base16-atlas-scheme}/atlas.yaml";
+  scheme = (inputs.base16.outputs.lib { inherit pkgs lib; }).mkSchemeAttrs "${inputs.base16-atlas-scheme}/atlas.yaml";
   my_terminal = "${pkgs.kitty}/bin/kitty";
   inherit inputs;
   set_gsettings = pkgs.writeShellScript "set_gsettings" ''
-        config="''${XDG_CONFIG_HOME:-$HOME/.config}/gtk-3.0/settings.ini"
-        if [ ! -f "$config" ]; then exit 1; fi
+    config="''${XDG_CONFIG_HOME:-$HOME/.config}/gtk-3.0/settings.ini"
+    if [ ! -f "$config" ]; then exit 1; fi
 
-        gnome_schema="org.gnome.desktop.interface"
-        gtk_theme="$(grep 'gtk-theme-name' "$config" | sed 's/.*\s*=\s*//')"
-        icon_theme="$(grep 'gtk-icon-theme-name' "$config" | sed 's/.*\s*=\s*//')"
-        cursor_theme="$(grep 'gtk-cursor-theme-name' "$config" | sed 's/.*\s*=\s*//')"
-        font_name="$(grep 'gtk-font-name' "$config" | sed 's/.*\s*=\s*//')"
-        gsettings set "$gnome_schema" gtk-theme "$gtk_theme"
-        gsettings set "$gnome_schema" icon-theme "$icon_theme"
-        gsettings set "$gnome_schema" cursor-theme "$cursor_theme"
-        gsettings set "$gnome_schema" font-name "$font_name"
-      '';
+    gnome_schema="org.gnome.desktop.interface"
+    gtk_theme="$(grep 'gtk-theme-name' "$config" | sed 's/.*\s*=\s*//')"
+    icon_theme="$(grep 'gtk-icon-theme-name' "$config" | sed 's/.*\s*=\s*//')"
+    cursor_theme="$(grep 'gtk-cursor-theme-name' "$config" | sed 's/.*\s*=\s*//')"
+    font_name="$(grep 'gtk-font-name' "$config" | sed 's/.*\s*=\s*//')"
+    gsettings set "$gnome_schema" gtk-theme "$gtk_theme"
+    gsettings set "$gnome_schema" icon-theme "$icon_theme"
+    gsettings set "$gnome_schema" cursor-theme "$cursor_theme"
+    gsettings set "$gnome_schema" font-name "$font_name"
+  '';
 in
 {
   # inherit test;
   imports = [
     (
-     import ./modules/waybar.nix ( { inherit (inputs) base16 base16-atlas-scheme base16-waybar; inherit scheme; })
+      import ./modules/waybar.nix ({ inherit (inputs) base16 base16-atlas-scheme base16-waybar; inherit scheme; })
     )
     (
       /* This is a way to pull arguments through when importing a module. Logic is similar to the comments above */
-      import ./modules/mako.nix ( { inherit (inputs) base16 base16-atlas-scheme base16-mako; })
+      import ./modules/mako.nix ({ inherit (inputs) base16 base16-atlas-scheme base16-mako; })
     )
     ./modules/gtk.nix
   ];
@@ -51,7 +51,7 @@ in
       assigns = {
         "mail" = [{ class = "^Thunderbird$"; }];
       };
-      bars = [];  # Set to empty to disable the default. Waybar is managed separately.
+      bars = [ ]; # Set to empty to disable the default. Waybar is managed separately.
       /* # bindkeysToCode = true; # TODO */
       /* colors = {};  # TODO */
       /* colors = { */
@@ -65,9 +65,9 @@ in
       /* }; */
       # Criteria for floating windows
       floating.criteria = [
-        { class = "^Thunderbird$"; title=".* Reminder.*"; }
+        { class = "^Thunderbird$"; title = ".* Reminder.*"; }
         { class = "Pavucontrol"; }
-        { class = "Steam"; title="Friends List";}
+        { class = "Steam"; title = "Friends List"; }
       ];
       gaps.smartBorders = "on";
       # Input configuration
@@ -84,7 +84,7 @@ in
       # Output configuration
       # TODO: laptop-specific
       output = {
-        "eDP-1"= { "scale" = "1"; };
+        "eDP-1" = { "scale" = "1"; };
       };
       modes = lib.mkOptionDefault {
         resize = {
@@ -96,32 +96,33 @@ in
 
       };
       # Custom keybindings
-      keybindings = let modifier = my_modifier; in lib.mkOptionDefault
-      {
-        /* Launcher */
-        "${modifier}+shift+r" = "exec ${pkgs.fuzzel}/bin/fuzzel";
-        "${modifier}+m" = "workspace mail";
-        "${modifier}+Ctrl+q" = "exec ${lock_command}";
-        /* Renaming script */
-        "${modifier}+Ctrl+r" = "exec ${pkgs.sway-rename-workspace}/bin/sway-rename-workspace";
-        /* Custom workspace switching */
-        "${modifier}+z" = "workspace prev";
-        "${modifier}+x" = "workspace next";
-        "${modifier}+grave" = "workspace back_and_forth";
-        /* TODO: make this part laptop-specific */
-        /*Brightness down */
-        "XF86MonBrightnessDown" = "exec '${pkgs.brightnessctl}/bin/brightnessctl set 10%-'";
-        "F7" = "exec '${pkgs.brightnessctl}/bin/brightnessctl set 10%-'";
-        # Brightness up
-        "XF86MonBrightnessUp" = "exec '${pkgs.brightnessctl}/bin/brightnessctl set +10%'";
-        "F8" = "exec '${pkgs.brightnessctl}/bin/brightnessctl set +10%'";
-        "${modifier}+shift+p" = "exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'systemctl --user stop graphical-session.target app.slice && swaymsg exit'";
-      };
+      keybindings = let modifier = my_modifier; in
+        lib.mkOptionDefault
+          {
+            /* Launcher */
+            "${modifier}+shift+r" = "exec ${pkgs.fuzzel}/bin/fuzzel";
+            "${modifier}+m" = "workspace mail";
+            "${modifier}+Ctrl+q" = "exec ${lock_command}";
+            /* Renaming script */
+            "${modifier}+Ctrl+r" = "exec ${pkgs.sway-rename-workspace}/bin/sway-rename-workspace";
+            /* Custom workspace switching */
+            "${modifier}+z" = "workspace prev";
+            "${modifier}+x" = "workspace next";
+            "${modifier}+grave" = "workspace back_and_forth";
+            /* TODO: make this part laptop-specific */
+            /*Brightness down */
+            "XF86MonBrightnessDown" = "exec '${pkgs.brightnessctl}/bin/brightnessctl set 10%-'";
+            "F7" = "exec '${pkgs.brightnessctl}/bin/brightnessctl set 10%-'";
+            # Brightness up
+            "XF86MonBrightnessUp" = "exec '${pkgs.brightnessctl}/bin/brightnessctl set +10%'";
+            "F8" = "exec '${pkgs.brightnessctl}/bin/brightnessctl set +10%'";
+            "${modifier}+shift+p" = "exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'systemctl --user stop graphical-session.target app.slice && swaymsg exit'";
+          };
       modifier = my_modifier;
-      seat = { "*" = { hide_cursor = "when-typing enable"; } ; };
+      seat = { "*" = { hide_cursor = "when-typing enable"; }; };
       startup = [
         /* Stop the graphical-session first if it is running.
-        It will be restarted by subsequent start of sway-session.target. */
+          It will be restarted by subsequent start of sway-session.target. */
         { command = "systemctl --user stop sway-session.target"; }
         { command = "${set_gsettings}"; }
         {
@@ -141,7 +142,7 @@ in
     extraConfig = ''
       for_window [class="Firefox"] inhibit_idle fullscreen
       for_window [class="Brave-browser"] inhibit_idle fullscreen
-      '' + (with scheme; ''
+    '' + (with scheme; ''
       client.focused          ${base05} ${base0D} ${base00} ${base0D} ${base0D}
       client.focused_inactive ${base01} ${base01} ${base05} ${base03} ${base01}
       client.unfocused        ${base01} ${base00} ${base05} ${base01} ${base01}
@@ -163,13 +164,13 @@ in
 
       Service = {
         Type = "simple";
-        ExecStart=''
+        ExecStart = ''
           ${pkgs.swayidle}/bin/swayidle -w \
             timeout 600 '${lock_command}' \
             timeout 600 'swaymsg "output * dpms off"' \
             resume 'swaymsg "output * dpms on"' \
             before-sleep '${lock_command}'
-          '';
+        '';
       };
       Install = {
         WantedBy = [ "graphical-session.target" ];
@@ -189,7 +190,7 @@ in
     { timout = 600; command = "${lock_command}"; }
     { timout = 1200; command = "${pkgs.sway}/bin/swaymsg 'output * dpms off'"; }
     ];
-  };  # TODO: available only on unstable as of Apr 3 2022
+    };  # TODO: available only on unstable as of Apr 3 2022
   */
   home.packages = with pkgs; [
     wl-clipboard
