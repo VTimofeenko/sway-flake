@@ -6,8 +6,7 @@
 
 .modules-left {
         background: linear-gradient(90deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.5) 28%, rgba(255,255,255,0.01) 100%);
-        /* Taken as a third of the screen */
-        min-width: 752px;
+        min-width: 20rem;
 }
 
 .modules-left > widget:first-child > #workspaces {
@@ -91,8 +90,7 @@ window#waybar.hidden {
 */
 .modules-right {
         background: linear-gradient(-90deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.5) 28%, rgba(255,255,255,0.01) 100%);
-        min-width: 752px;
-
+        min-width: 20rem;
 }
 .modules-right * {
         color: @base06;
