@@ -100,7 +100,7 @@ in
         lib.mkOptionDefault
           {
             /* Launcher */
-            "${modifier}+shift+r" = "exec ${pkgs.fuzzel}/bin/fuzzel";
+            "${modifier}+r" = "exec ${pkgs.fuzzel}/bin/fuzzel";
             "${modifier}+m" = "workspace mail";
             "${modifier}+Ctrl+q" = "exec ${lock_command}";
             /* Renaming script */
@@ -120,6 +120,7 @@ in
             # Scratchpad terminal shortcut
             "${modifier}+Shift+Return" = ''exec --no-startup-id ${pkgs.scratchpad_terminal}/bin/scratchpad_terminal ${my_terminal} "scratchpad_term"'';
             "${modifier}+Shift+f" = "floating toggle";
+            "${modifier}+Shift+r" = "mode resize";
           };
       modifier = my_modifier;
       seat = { "*" = { hide_cursor = "when-typing enable"; }; };
