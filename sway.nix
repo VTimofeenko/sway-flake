@@ -119,6 +119,7 @@ in
             "${modifier}+shift+p" = "exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'systemctl --user stop graphical-session.target app.slice && swaymsg exit'";
             # Scratchpad terminal shortcut
             "${modifier}+Shift+Return" = ''exec --no-startup-id ${pkgs.scratchpad_terminal}/bin/scratchpad_terminal ${my_terminal} "scratchpad_term"'';
+            "${modifier}+Shift+f" = "floating toggle";
           };
       modifier = my_modifier;
       seat = { "*" = { hide_cursor = "when-typing enable"; }; };
