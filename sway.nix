@@ -146,7 +146,7 @@ in
             "${modifier}+Shift+Return" = ''exec --no-startup-id ${pkgs.scratchpad_terminal}/bin/scratchpad_terminal ${my_terminal} "scratchpad_term"'';
             "${modifier}+Shift+f" = "floating toggle";
             "${modifier}+Shift+r" = "mode resize";
-            "${modifier}+backslash" = let message = mkHelpNotificationText exit_ctl; in ''exec logger ${message}; exec --no-startup-id ${pkgs.yad}/bin/yad --html --no-buttons --text "${message} --no-focus"; mode ${exit_ctl.name}'';
+            "${modifier}+backslash" = let message = mkHelpNotificationText exit_ctl; in ''exec logger ${message}; exec --no-startup-id ${pkgs.yad}/bin/yad --html --no-buttons --text "${message}"; mode ${exit_ctl.name}'';
           }
           /* Add lower/raise volume mappings */
           // multiMap "exec ${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ -10%" [ "F2" "XF86AudioLowerVolume" ]
