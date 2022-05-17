@@ -3,6 +3,7 @@
 let
   sway-launcher = pkgs.writeShellScript "sway-launcher" ''
     exec systemd-cat --identifier=sway sway
+    systemctl --user stop sway-wm.target
   '';
 in
 {

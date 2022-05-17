@@ -1,4 +1,4 @@
-inputs: { pkgs, ... }:
+inputs: custom_target: { pkgs, ... }:
 
 let
   /* template = (inputs.base16.outputs.lib {inherit pkgs lib;}).mkSchemeAttrs */
@@ -10,8 +10,26 @@ let
   /* Function that turns an icon into a <span> to force a specific font */
   /* TODO: add proper dep for the font? */
   mkSpan = icon: "<span font=\"Font Awesome 5 Free Solid\">${icon}</span>";
+  start-waybar = pkgs.writeShellScriptBin "start-waybar" ''
+    export SWAYSOCK=/run/user/$(id -u)/sway-ipc.$(id -u).$(pgrep -f 'sway$').sock
+    ${pkgs.waybar}/bin/waybar
+  '';
 in
 {
+  systemd.user.services.waybar = {
+    Service = {
+      ExecStart = pkgs.lib.mkForce "${start-waybar}/bin/start-waybar";
+    };
+    Unit = {
+      BindsTo = [ "${custom_target.fullname}" ];
+      PartOf = [ "${custom_target.fullname}" ];
+      # Set to 2 to limit race when logging out
+      StartLimitBurst = 2;
+    };
+    Install = {
+      WantedBy = [ "${custom_target.fullname}" ];
+    };
+  };
   programs.waybar = {
     enable = true;
     systemd = {
