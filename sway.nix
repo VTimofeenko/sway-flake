@@ -16,7 +16,7 @@ let
   # -k: show keyboard layout
   # -c: color
   lock_command = "${pkgs.swaylock}/bin/swaylock -fF -k -c 000000";
-  my_modifier = "Mod4";
+  my_modifier = "Mod1";
   /* This bit of black magic uses 'mkSchemeAttrs' function from base16 while ensuring that proper pkgs and lib are inherited. With the way 'inputs' are being used (see comment at the beginning) this allows to control which parameter is used from flake, which – from the rest of configuration.
   */
   scheme = (inputs.base16.outputs.lib { inherit pkgs lib; }).mkSchemeAttrs "${inputs.base16-atlas-scheme}/atlas.yaml";
@@ -157,7 +157,12 @@ in
             "${modifier}+Shift+Return" = ''exec --no-startup-id ${pkgs.scratchpad_terminal}/bin/scratchpad_terminal ${my_terminal} "scratchpad_term"'';
             "${modifier}+Shift+f" = "floating toggle";
             "${modifier}+Shift+r" = "mode resize";
-            "${modifier}+backslash" = let message = mkHelpNotificationText exit_ctl; in ''exec --no-startup-id ${pkgs.yad}/bin/yad --html --no-buttons --text "${message}"; mode ${exit_ctl.name}'';
+            "${modifier}+backslash" = let message = mkHelpNotificationText exit_ctl; in
+              lib.concatStringsSep ";" [
+                ''exec ${pkgs.yad}/bin/yad --html --no-buttons --text "${message}"''
+                ''exec --no-startup-id ${pkgs.sway-move-to}/bin/sway-move-to "mid-top"''
+                ''mode ${exit_ctl.name}''
+              ];
           }
           /* Add lower/raise volume mappings */
           // multiMap "exec ${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ -10%" [ "F2" "XF86AudioLowerVolume" ]
@@ -187,7 +192,7 @@ in
     extraConfig = ''
       for_window [class="Firefox"] inhibit_idle fullscreen
       for_window [class="Brave-browser"] inhibit_idle fullscreen
-      for_window [app_id="yad"] floating enable
+      for_window [app_id="yad"] floating enable, border none
     '' + (with scheme; ''
       client.focused          ${base05} ${base0D} ${base00} ${base0D} ${base0D}
       client.focused_inactive ${base01} ${base01} ${base05} ${base03} ${base01}

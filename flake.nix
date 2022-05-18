@@ -20,6 +20,13 @@
       url = "github:mnussbaum/base16-waybar";
       flake = false;
     };
+
+    wef-dotfiles = {
+      # Planning to use a couple of scripts from there
+      url = "gitlab:wef/dotfiles";
+      flake = false;
+
+    };
     /* Not needed, very little in the repo */
     /* base16- = { */
     /*   url = "github:rkubosz/base16-sway"; */
@@ -50,6 +57,23 @@
     {
       # Overlay containing custom packages and scripts
       overlay = final: prev: {
+        sway-move-to = with final; stdenv.mkDerivation rec {
+          name = "sway-move-to";
+          unpackPhase = ":";
+          buildPhase = ''
+            cat > ${name} <<EOF
+            #!/run/current-system/sw/bin/env bash
+            export PATH=${prev.lib.concatStringsSep ":" (map (x: x+"/bin") [ prev.jq prev.sway] )}:$PATH
+            EOF
+            chmod +x ${name}
+            cat ${inputs.wef-dotfiles}/bin/${name} >> ${name}
+          '';
+          installPhase = ''
+            mkdir -p $out/bin
+            cp ${name} $out/bin
+          '';
+        };
+
         # Script that renames workspaces
         sway-rename-workspace = with final; stdenv.mkDerivation rec {
           name = "sway-rename-workspace-${version}";
@@ -80,38 +104,39 @@
             '';
         };
         /* A script that shows a scratchpad terminal
-        Script that checks if scratchpad terminal is running.
-        If it is - show scratchpad
-        If it is not - launch it and show
-        Accepts terminal as the first parameter
-        Accepts terminal title as the second parameter
+          Script that checks if scratchpad terminal is running.
+          If it is - show scratchpad
+          If it is not - launch it and show
+          Accepts terminal as the first parameter
+          Accepts terminal title as the second parameter
 
-        For sway-related config, see sway.nix
+          For sway-related config, see sway.nix
         */
-        scratchpad_terminal = let pkg_name = "scratchpad_terminal"; in with final; stdenv.mkDerivation rec {
-          name = "${pkg_name}-${version}";
-          unpackPhase = ":";
-          buildPhase = ''
-            cat > ${pkg_name} <<EOF
-            #!${prev.zsh}/bin/zsh
-            export PATH=${prev.lib.concatStringsSep ":" (map (x: x+"/bin") [ prev.sway prev.libnotify ] )}:$PATH
-            export IPC_CMD="swaymsg"
-            EOF
-            cat ${self}/scripts/${pkg_name} >> ${pkg_name}
-            chmod +x ${pkg_name}
-          '';
-          installPhase =
-            ''
-              mkdir -p $out/bin
-              cp ${pkg_name} $out/bin/
+        scratchpad_terminal = let pkg_name = "scratchpad_terminal"; in
+          with final; stdenv.mkDerivation rec {
+            name = "${pkg_name}-${version}";
+            unpackPhase = ":";
+            buildPhase = ''
+              cat > ${pkg_name} <<EOF
+              #!${prev.zsh}/bin/zsh
+              export PATH=${prev.lib.concatStringsSep ":" (map (x: x+"/bin") [ prev.sway prev.libnotify ] )}:$PATH
+              export IPC_CMD="swaymsg"
+              EOF
+              cat ${self}/scripts/${pkg_name} >> ${pkg_name}
+              chmod +x ${pkg_name}
             '';
+            installPhase =
+              ''
+                mkdir -p $out/bin
+                cp ${pkg_name} $out/bin/
+              '';
 
-        };
+          };
 
       };
       /* Note:
-      To import this module, it's necessary to use something like
-      home-manager.users.username = {this_flake}.nixosModule { inherit vt-colors pkgs ; inherit (pkgs) lib; };
+        To import this module, it's necessary to use something like
+        home-manager.users.username = {this_flake}.nixosModule { inherit vt-colors pkgs ; inherit (pkgs) lib; };
       */
       # nixosModule = import ./sway.nix { inherit (inputs) base16 base16-atlas-scheme; };
       nixosModule = import ./sway.nix inputs;
