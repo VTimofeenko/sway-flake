@@ -100,17 +100,7 @@ in
         "mail" = [{ class = "^Thunderbird$"; }];
       };
       bars = [ ]; # Set to empty to disable the default. Waybar is managed separately.
-      /* # bindkeysToCode = true; # TODO */
-      /* colors = {};  # TODO */
-      /* colors = { */
-      /*   focused = { */
-      /*     background = "#5f676a"; */
-      /*     border = vt-colors.colors_named.primary_selection; */
-      /*     childBorder = vt-colors.colors_named.primary_selection; */
-      /*     indicator = vt-colors.colors_raw.light-purple; */
-      /*     text = "#ffffff"; */
-      /*   }; */
-      /* }; */
+      /* # bindkeysToCode = true; */
       # Criteria for floating windows
       floating.criteria = [
         { class = "^Thunderbird$"; title = ".* Reminder.*"; }
@@ -130,7 +120,6 @@ in
         };
       };
       # Output configuration
-      # TODO: laptop-specific
       output = {
         "eDP-1" = { "scale" = "1"; };
       };
@@ -155,7 +144,6 @@ in
             "${modifier}+z" = "workspace prev";
             "${modifier}+x" = "workspace next";
             "${modifier}+grave" = "workspace back_and_forth";
-            /* TODO: make this part laptop-specific */
             /*Brightness down */
             "XF86MonBrightnessDown" = "exec '${pkgs.brightnessctl}/bin/brightnessctl set 10%-'";
             "F7" = "exec '${pkgs.brightnessctl}/bin/brightnessctl set 10%-'";
@@ -252,7 +240,7 @@ in
     { timout = 600; command = "${lock_command}"; }
     { timout = 1200; command = "${pkgs.sway}/bin/swaymsg 'output * dpms off'"; }
     ];
-    };  # TODO: available only on unstable as of Apr 3 2022
+    };
   */
   home.packages = with pkgs; [
     wl-clipboard

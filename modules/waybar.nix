@@ -8,7 +8,6 @@ let
   /*   inputs.base16-mako; */
   template = inputs.scheme inputs.base16-waybar;
   /* Function that turns an icon into a <span> to force a specific font */
-  /* TODO: add proper dep for the font? */
   mkSpan = icon: "<span font=\"Font Awesome 5 Free Solid\">${icon}</span>";
   start-waybar = pkgs.writeShellScriptBin "start-waybar" ''
     export SWAYSOCK=/run/user/$(id -u)/sway-ipc.$(id -u).$(pgrep -f 'sway$').sock
@@ -42,7 +41,6 @@ in
       layer = "bottom";
       position = "top";
       height = 30;
-      /* TODO: laptop-specific */
       /* output = [ "eDP-1" ]; */
       modules-left = [ "sway/workspaces" "sway/mode" ];
       modules-center = [ ];
@@ -69,7 +67,6 @@ in
           };
         };
         "temperature" = {
-          /* # TODO laptop-specific */
           "thermal-zone" = 3;
           "critical-threshold" = 80;
           "format-critical" = mkSpan "{icon}" + " {temperatureC}°C";

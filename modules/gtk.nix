@@ -9,11 +9,10 @@
   gtk.theme.package = pkgs.materia-theme;
   gtk.iconTheme.name = "Papirus-Dark-Maia";
   gtk.iconTheme.package = pkgs.papirus-maia-icon-theme;
-  /* TODO gtk.cursorTheme is only on unstable :( */
   home.packages = [ pkgs.quintom-cursor-theme ];
   gtk.gtk3.extraConfig = {
     gtk-application-prefer-dark-theme = true;
-    gtk-icon-theme-name   = "Papirus-Dark-Maia";
+    gtk-icon-theme-name = "Papirus-Dark-Maia";
     gtk-cursor-theme-name = "Quintom_Ink";
   };
   dconf.settings = {
