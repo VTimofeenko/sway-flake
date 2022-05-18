@@ -5,6 +5,12 @@
 inputs: { pkgs, lib, ... }:
 
 let
+  custom_target = rec {
+    name = "sway-wm";
+    fullname = name + ".target";
+    desc = "Target to bind user-services to.";
+  };
+
   # -f: daemonize
   # -F: show failed attempts
   # -k: show keyboard layout
@@ -17,6 +23,9 @@ let
   my_terminal = "${pkgs.kitty}/bin/kitty";
   inherit inputs;
   set_gsettings = pkgs.writeShellScript "set_gsettings" ''
+
+    PATH=${pkgs.glib}/bin:$PATH
+
     config="''${XDG_CONFIG_HOME:-$HOME/.config}/gtk-3.0/settings.ini"
     if [ ! -f "$config" ]; then exit 1; fi
 
@@ -38,7 +47,7 @@ let
     name = "exit_ctl";
     mode = {
       exit_ctl = {
-        "l" = "exec swaymsg exit";
+        "l" = "exec systemctl --user stop ${custom_target.fullname};exec swaymsg exit";
         "s" = "exec systemctl suspend";
         "Shift+s" = "exec systemctl shutdown";
         "Shift+r" = "exec systemctl reboot";
@@ -52,13 +61,15 @@ in
   # inherit test;
   imports = [
     (
-      import ./modules/waybar.nix ({
-        inherit (inputs) base16 base16-atlas-scheme base16-waybar; inherit scheme;
-      })
+      import ./modules/waybar.nix
+        ({
+          inherit (inputs) base16 base16-atlas-scheme base16-waybar; inherit scheme;
+        })
+        custom_target
     )
     (
       /* This is a way to pull arguments through when importing a module. Logic is similar to the comments above */
-      import ./modules/mako.nix ({ inherit (inputs) base16 base16-atlas-scheme base16-mako; })
+      import ./modules/mako.nix ({ inherit (inputs) base16 base16-atlas-scheme base16-mako; }) custom_target
     )
     ./modules/gtk.nix
   ];
@@ -141,7 +152,7 @@ in
             # Brightness up
             "XF86MonBrightnessUp" = "exec '${pkgs.brightnessctl}/bin/brightnessctl set +10%'";
             "F8" = "exec '${pkgs.brightnessctl}/bin/brightnessctl set +10%'";
-            "${modifier}+shift+p" = "exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'systemctl --user stop graphical-session.target app.slice && swaymsg exit'";
+            "${modifier}+shift+p" = "exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'systemctl --user stop ${custom_target.fullname} && swaymsg exit'";
             # Scratchpad terminal shortcut
             "${modifier}+Shift+Return" = ''exec --no-startup-id ${pkgs.scratchpad_terminal}/bin/scratchpad_terminal ${my_terminal} "scratchpad_term"'';
             "${modifier}+Shift+f" = "floating toggle";
@@ -157,12 +168,12 @@ in
       startup = [
         /* Stop the graphical-session first if it is running.
           It will be restarted by subsequent start of sway-session.target. */
-        { command = "systemctl --user stop sway-session.target"; }
+        { command = "systemctl --user start ${custom_target.fullname}"; }
+        { command = "systemctl restart xremap.service"; }
         { command = "${set_gsettings}"; }
         {
           command = "swaybg --image /run/current-system/sw/share/backgrounds/sway/Sway_Wallpaper_Blue_768x1024.png --mode fill";
         }
-        # { command = "mako"; }
       ];
       terminal = "${my_terminal}";
       # Default commands to execute
@@ -193,9 +204,12 @@ in
       Unit = {
         Description = "Idle manager for Wayland";
         Documentation = [ "man:swayidle(1)" ];
-        PartOf = [ "graphical-session.target" ];
+        PartOf = [ "${custom_target.fullname}" ];
+        BindsTo = [ "${custom_target.fullname}" ];
       };
-
+      Install = {
+        WantedBy = [ "${custom_target.fullname}" ];
+      };
       Service = {
         Type = "simple";
         ExecStart = ''
@@ -206,9 +220,12 @@ in
             before-sleep '${lock_command}'
         '';
       };
-      Install = {
-        WantedBy = [ "graphical-session.target" ];
-      };
+    };
+  };
+  # custom target to bind services to
+  systemd.user.targets."${custom_target.name}" = {
+    Unit = {
+      Description = custom_target.desc;
     };
   };
 
@@ -228,7 +245,6 @@ in
   */
   home.packages = with pkgs; [
     wl-clipboard
-    mako
     kitty
     dmenu
     fuzzel
