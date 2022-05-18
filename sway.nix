@@ -23,6 +23,9 @@ let
   my_terminal = "${pkgs.kitty}/bin/kitty";
   inherit inputs;
   set_gsettings = pkgs.writeShellScript "set_gsettings" ''
+
+    PATH=${pkgs.glib}/bin:$PATH
+
     config="''${XDG_CONFIG_HOME:-$HOME/.config}/gtk-3.0/settings.ini"
     if [ ! -f "$config" ]; then exit 1; fi
 
