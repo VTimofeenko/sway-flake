@@ -166,6 +166,7 @@ in
         /* Stop the graphical-session first if it is running.
           It will be restarted by subsequent start of sway-session.target. */
         { command = "systemctl --user start ${custom_target.fullname}"; }
+        { command = "systemctl restart xremap.service"; }
         { command = "${set_gsettings}"; }
         {
           command = "swaybg --image /run/current-system/sw/share/backgrounds/sway/Sway_Wallpaper_Blue_768x1024.png --mode fill";
