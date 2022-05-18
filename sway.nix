@@ -43,6 +43,7 @@ let
   normal_mode_cmd = "exec pkill yad; mode default";
   # The function to create help for mode
   mkHelpNotificationText = mode_def: lib.concatStringsSep "\\n" (lib.mapAttrsToList (name: value: "${name}: ${value}") (lib.filterAttrs (name: value: value != normal_mode_cmd) mode_def.mode."${mode_def.name}"));
+  showHelpNotification = mode_def: "exec --no-startup-id ${pkgs.yad}/bin/yad --html --no-buttons --text \"${mkHelpNotificationText mode_def}\"";
   exit_ctl = {
     name = "exit_ctl";
     mode = {
@@ -51,6 +52,23 @@ let
         "s" = "exec systemctl suspend";
         "Shift+s" = "exec systemctl shutdown";
         "Shift+r" = "exec systemctl reboot";
+        "Return" = normal_mode_cmd;
+        "Escape" = normal_mode_cmd;
+      };
+    };
+  };
+  resize = {
+    name = "resize";
+    mode = {
+      resize = {
+        "h" = "resize shrink width 10 px";
+        "j" = "resize grow height 10 px";
+        "k" = "resize shrink height 10 px";
+        "l" = "resize grow width 10 px";
+        "Shift+h" = "resize shrink width 100 px";
+        "Shift+j" = "resize grow height 100 px";
+        "Shift+k" = "resize shrink height 100 px";
+        "Shift+l" = "resize grow width 100 px";
         "Return" = normal_mode_cmd;
         "Escape" = normal_mode_cmd;
       };
@@ -116,15 +134,7 @@ in
       output = {
         "eDP-1" = { "scale" = "1"; };
       };
-      modes = lib.mkOptionDefault
-        ({
-          resize = {
-            "Shift+h" = "resize shrink width 100 px";
-            "Shift+j" = "resize grow height 100 px";
-            "Shift+k" = "resize shrink height 100 px";
-            "Shift+l" = "resize grow width 100 px";
-          };
-        } // exit_ctl.mode);
+      modes = resize.mode // exit_ctl.mode;
       # Custom keybindings
       keybindings =
         let
@@ -156,8 +166,8 @@ in
             # Scratchpad terminal shortcut
             "${modifier}+Shift+Return" = ''exec --no-startup-id ${pkgs.scratchpad_terminal}/bin/scratchpad_terminal ${my_terminal} "scratchpad_term"'';
             "${modifier}+Shift+f" = "floating toggle";
-            "${modifier}+Shift+r" = "mode resize";
-            "${modifier}+backslash" = let message = mkHelpNotificationText exit_ctl; in ''exec --no-startup-id ${pkgs.yad}/bin/yad --html --no-buttons --text "${message}"; mode ${exit_ctl.name}'';
+            "${modifier}+Shift+r" = "${showHelpNotification resize}; mode ${resize.name}";
+            "${modifier}+backslash" = ''${showHelpNotification exit_ctl}; mode ${exit_ctl.name}'';
           }
           /* Add lower/raise volume mappings */
           // multiMap "exec ${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ -10%" [ "F2" "XF86AudioLowerVolume" ]
@@ -187,7 +197,8 @@ in
     extraConfig = ''
       for_window [class="Firefox"] inhibit_idle fullscreen
       for_window [class="Brave-browser"] inhibit_idle fullscreen
-      for_window [app_id="yad"] floating enable
+      for_window [app_id="yad"] floating enable, border none
+      no_focus [app_id="yad"]
     '' + (with scheme; ''
       client.focused          ${base05} ${base0D} ${base00} ${base0D} ${base0D}
       client.focused_inactive ${base01} ${base01} ${base05} ${base03} ${base01}
