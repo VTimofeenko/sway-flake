@@ -1,12 +1,7 @@
-inputs: custom_target: { pkgs, ... }:
+waybarTemplate: { pkgs, config, ... }:
 
 let
-  /* template = (inputs.base16.outputs.lib {inherit pkgs lib;}).mkSchemeAttrs */
-  /*   # The color scheme */
-  /*   "${inputs.base16-atlas-scheme}/atlas.yaml" */
-  /*   # The template */
-  /*   inputs.base16-mako; */
-  template = inputs.scheme inputs.base16-waybar;
+  inherit (config.vt-sway) customTarget;
   /* Function that turns an icon into a <span> to force a specific font */
   mkSpan = icon: "<span font=\"Font Awesome 5 Free Solid\">${icon}</span>";
   start-waybar = pkgs.writeShellScriptBin "start-waybar" ''
@@ -20,13 +15,13 @@ in
       ExecStart = pkgs.lib.mkForce "${start-waybar}/bin/start-waybar";
     };
     Unit = {
-      BindsTo = [ "${custom_target.fullname}" ];
-      PartOf = [ "${custom_target.fullname}" ];
+      BindsTo = [ "${customTarget.fullname}" ];
+      PartOf = [ "${customTarget.fullname}" ];
       # Set to 2 to limit race when logging out
       StartLimitBurst = 2;
     };
     Install = {
-      WantedBy = [ "${custom_target.fullname}" ];
+      WantedBy = [ "${customTarget.fullname}" ];
     };
   };
   programs.waybar = {
@@ -117,9 +112,8 @@ in
       };
     }];
     style = ''
-      ${builtins.readFile template}
-      ${builtins.readFile ../assets/waybar.style.css}
-
+      ${builtins.readFile waybarTemplate}
+      ${builtins.readFile ./waybar.style.css}
     '';
   };
 }

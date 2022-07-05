@@ -20,22 +20,6 @@
         "type": "github"
       }
     },
-    "base16-atlas-scheme": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1538613261,
-        "narHash": "sha256-l0WzTUSvLgsL+ExcgdMzXoJnfVQvKr8Jk5uKI6Li8CU=",
-        "owner": "ajlende",
-        "repo": "base16-atlas-scheme",
-        "rev": "55fe308a8d93a31c1bd55e80ff573b11511b6cf3",
-        "type": "github"
-      },
-      "original": {
-        "owner": "ajlende",
-        "repo": "base16-atlas-scheme",
-        "type": "github"
-      }
-    },
     "base16-mako": {
       "flake": false,
       "locked": {
@@ -65,6 +49,22 @@
       "original": {
         "owner": "mnussbaum",
         "repo": "base16-waybar",
+        "type": "github"
+      }
+    },
+    "color-scheme": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1538613261,
+        "narHash": "sha256-l0WzTUSvLgsL+ExcgdMzXoJnfVQvKr8Jk5uKI6Li8CU=",
+        "owner": "ajlende",
+        "repo": "base16-atlas-scheme",
+        "rev": "55fe308a8d93a31c1bd55e80ff573b11511b6cf3",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ajlende",
+        "repo": "base16-atlas-scheme",
         "type": "github"
       }
     },
@@ -119,9 +119,9 @@
     "root": {
       "inputs": {
         "base16": "base16",
-        "base16-atlas-scheme": "base16-atlas-scheme",
         "base16-mako": "base16-mako",
         "base16-waybar": "base16-waybar",
+        "color-scheme": "color-scheme",
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs_2"
       }

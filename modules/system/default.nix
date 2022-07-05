@@ -3,7 +3,7 @@
 
 {
   imports = [
-    ./modules/greetd.nix
+    ./greetd.nix
   ];
   # Swaylock requires this
   security.pam.services.swaylock = {

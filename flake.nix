@@ -8,7 +8,7 @@
     base16.url = "github:SenchoPens/base16.nix";
     base16.inputs.nixpkgs.follows = "nixpkgs";
 
-    base16-atlas-scheme = {
+    color-scheme = {
       url = "github:ajlende/base16-atlas-scheme";
       flake = false;
     };
@@ -30,6 +30,7 @@
 
   outputs = { self, nixpkgs, home-manager, ... }@inputs:
     let
+      schemeName = "atlas";
 
       # to work with older version of flakes
       lastModifiedDate = self.lastModifiedDate or self.lastModified or "19700101";
@@ -72,8 +73,9 @@
           inherit (localPkgs) sway-rename-workspace scratchpad-terminal;
         };
 
-      nixosModule = import ./sway.nix inputs;
-
-      nixosModules.system = import ./system_module.nix;
+      nixosModules = {
+        default = import ./modules inputs schemeName;
+        system = import ./modules/system;
+      };
     };
 }
