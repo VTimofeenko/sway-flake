@@ -13,6 +13,11 @@
   programs.sway.enable = true;
   programs.dconf.enable = true;
   hardware.opengl.enable = true;
+
+  xdg.portal.enable = true;
+  xdg.portal.wlr.enable = true;
+
+  xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
   # fonts
 
   fonts = {
