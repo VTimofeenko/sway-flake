@@ -1,0 +1,25 @@
+#!/run/current-system/sw/bin/env bash
+
+
+shopt -s nullglob globstar
+
+prefix=${PASSWORD_STORE_DIR-~/.password-store}
+password_files=( "$prefix"/**/*.gpg )
+password_files=( "${password_files[@]#"$prefix"/}" )
+password_files=( "${password_files[@]%.gpg}" )
+
+# password=$(printf '%s\n' "${password_files[@]}" | rofi -dmenu "$@")
+password=$(printf '%s\n' "${password_files[@]}" | bemenu -l 5"$@")
+
+[[ -n $password ]] || exit
+
+password_content=$(pass show "$password" | head -1 )
+echo "${PIPESTATUS[0]}"
+echo $?
+exit
+echo "Content: $password_content"
+if [ $? -ne 0 ]; then
+        notify-send -u critical "pass-c-menu" "Error: ${password_content}"
+else
+        wl-copy --paste-once $(pass show "$password" | head -1) && notify-send "Password copied" "The ${password} has been copied into the clipboard and can be pasted once."
+fi
