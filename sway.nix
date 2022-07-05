@@ -152,7 +152,7 @@ in
             "F8" = "exec '${pkgs.brightnessctl}/bin/brightnessctl set +10%'";
             "${modifier}+shift+p" = "exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'systemctl --user stop ${custom_target.fullname} && swaymsg exit'";
             # Scratchpad terminal shortcut
-            "${modifier}+Shift+Return" = ''exec --no-startup-id ${pkgs.scratchpad_terminal}/bin/scratchpad_terminal ${my_terminal} "scratchpad_term"'';
+            "${modifier}+Shift+Return" = ''exec --no-startup-id ${pkgs.scratchpad-terminal}/bin/scratchpad-terminal ${my_terminal} "scratchpad_term"'';
             "${modifier}+Shift+f" = "floating toggle";
             "${modifier}+Shift+r" = "${showHelpNotification resize}; mode ${resize.name}";
             "${modifier}+backslash" = ''${showHelpNotification exit_ctl}; mode ${exit_ctl.name}'';

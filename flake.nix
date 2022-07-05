@@ -44,76 +44,34 @@
       forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
 
       # Nixpkgs instantiated for supported system types.
-      nixpkgsFor = forAllSystems (system: import nixpkgs { inherit system; overlays = [ self.overlay ]; });
+      nixpkgsFor = forAllSystems (system: import nixpkgs { inherit system; overlays = [ self.overlays.default ]; });
     in
-
     {
-      # Overlay containing custom packages and scripts
-      overlay = final: prev: {
-        # Script that renames workspaces
-        sway-rename-workspace = with final; stdenv.mkDerivation rec {
-          name = "sway-rename-workspace-${version}";
-          unpackPhase = ":";
-          buildPhase =
-            ''
-              cat > sway-rename-workspace <<EOF
-              #!${prev.zsh}/bin/zsh
-              # Script that renames current workspace from (index) to (index): name
-              # Also has some icons to suggest
-
-              # Generate the new PATH by hand, declaring dependencies
-              # There was an easier way to do this...
-              export PATH=${prev.lib.concatStringsSep ":" (map (x: x+"/bin") [ prev.bemenu prev.jq prev.sway] )}:$PATH
-
-              # Declare colors, they will be used in the script itself
-              TITLE_FOREGROUND_COLOR="#685da2"
-              HIGHLIGHTED_FOREGROUND_COLOR="#a89dd7"
-              EOF
-              # A bit hacky, but better than the escape headache
-              cat ${self}/scripts/rename-workspace >> sway-rename-workspace
-              chmod +x sway-rename-workspace
-            '';
-          installPhase =
-            ''
-              mkdir -p $out/bin
-              cp sway-rename-workspace $out/bin/
-            '';
-        };
-        /* A script that shows a scratchpad terminal
-        Script that checks if scratchpad terminal is running.
-        If it is - show scratchpad
-        If it is not - launch it and show
-        Accepts terminal as the first parameter
-        Accepts terminal title as the second parameter
-
-        For sway-related config, see sway.nix
-        */
-        scratchpad_terminal = let pkg_name = "scratchpad_terminal"; in with final; stdenv.mkDerivation rec {
-          name = "${pkg_name}-${version}";
-          unpackPhase = ":";
-          buildPhase = ''
-            cat > ${pkg_name} <<EOF
-            #!${prev.zsh}/bin/zsh
-            export PATH=${prev.lib.concatStringsSep ":" (map (x: x+"/bin") [ prev.sway prev.libnotify ] )}:$PATH
-            export IPC_CMD="swaymsg"
-            EOF
-            cat ${self}/scripts/${pkg_name} >> ${pkg_name}
-            chmod +x ${pkg_name}
-          '';
-          installPhase =
-            ''
-              mkdir -p $out/bin
-              cp ${pkg_name} $out/bin/
-            '';
-
+      packages = forAllSystems (system:
+        import ./overlay {
+          pkgs = import nixpkgs { inherit system; };
+        });
+      apps = forAllSystems (system:
+        rec {
+          sway-rename-workspace = {
+            type = "app";
+            program = "${self.packages.${system}.sway-rename-workspace}/bin/sway-rename-workspace";
+          };
+          scratchpad-terminal = {
+            type = "app";
+            program = "${self.packages.${system}.scratchpad-terminal}/bin/scratchpad-terminal";
+          };
+          default = sway-rename-workspace;
+        }
+      );
+      overlays.default = final: prev:
+        let
+          localPkgs = import ./overlay { pkgs = final; };
+        in
+        {
+          inherit (localPkgs) sway-rename-workspace scratchpad-terminal;
         };
 
-      };
-      /* Note:
-      To import this module, it's necessary to use something like
-      home-manager.users.username = {this_flake}.nixosModule { inherit vt-colors pkgs ; inherit (pkgs) lib; };
-      */
-      # nixosModule = import ./sway.nix { inherit (inputs) base16 base16-atlas-scheme; };
       nixosModule = import ./sway.nix inputs;
 
       nixosModules.system = import ./system_module.nix;
