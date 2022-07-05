@@ -16,5 +16,6 @@ in
     colorScheme
     makoModule
     waybarModule
+    ./flameshot
   ];
 }
