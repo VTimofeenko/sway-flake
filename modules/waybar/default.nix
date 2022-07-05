@@ -5,7 +5,7 @@ let
   /* Function that turns an icon into a <span> to force a specific font */
   mkSpan = icon: "<span font=\"Font Awesome 5 Free Solid\">${icon}</span>";
   start-waybar = pkgs.writeShellScriptBin "start-waybar" ''
-    export SWAYSOCK=/run/user/$(id -u)/sway-ipc.$(id -u).$(pgrep -f 'sway$').sock
+    export SWAYSOCK=/run/user/$(${pkgs.coreutils}/bin/id -u)/sway-ipc.$(${pkgs.coreutils}/bin/id -u).$(${pkgs.procps}/bin/pgrep -f 'sway$').sock
     ${pkgs.waybar}/bin/waybar
   '';
 in
@@ -27,7 +27,8 @@ in
   programs.waybar = {
     enable = true;
     systemd = {
-      enable = true;
+      /* Disabled, because a custom systemd service is used */
+      /* enable = true; */
       /* # target = "sway-session.target"; # Available only on unstable as of Apr 3 2022 */
     };
     settings = [{
