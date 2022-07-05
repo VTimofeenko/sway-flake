@@ -2,16 +2,20 @@
   description = "Nix flake that contains my sway config";
 
   inputs = {
-    nixpkgs.url = "nixpkgs/nixos-21.11";
-    home-manager.url = "github:rycee/home-manager/release-21.11";
+    nixpkgs.url = "nixpkgs/nixos-22.05";
+    home-manager.url = "github:rycee/home-manager/release-22.05";
     # Colors
-    base16.url = "github:SenchoPens/base16.nix";
-    base16.inputs.nixpkgs.follows = "nixpkgs";
+    base16 = {
+      url = "github:SenchoPens/base16.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
+    # Colorscheme. Note the variable "schemeName" below. It also needs to be changed to point at the proper yaml file.
     color-scheme = {
       url = "github:ajlende/base16-atlas-scheme";
       flake = false;
     };
+    # Templates for services
     base16-mako = {
       url = "github:stacyharper/base16-mako";
       flake = false;
@@ -20,11 +24,6 @@
       url = "github:mnussbaum/base16-waybar";
       flake = false;
     };
-    /* Not needed, very little in the repo */
-    /* base16- = { */
-    /*   url = "github:rkubosz/base16-sway"; */
-    /*   flake = false; */
-    /* }; */
   };
 
 
