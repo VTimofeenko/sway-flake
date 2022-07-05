@@ -123,19 +123,7 @@
         "base16-mako": "base16-mako",
         "base16-waybar": "base16-waybar",
         "home-manager": "home-manager",
-        "nixpkgs": "nixpkgs_2",
-        "vt-colors": "vt-colors"
-      }
-    },
-    "vt-colors": {
-      "locked": {
-        "narHash": "sha256-pDRx6NkD9qW8FY/AHzk3SaRktqre0rzCgqY603LtBhc=",
-        "path": "/home/spacecadet/Documents/projects/vt-colors",
-        "type": "path"
-      },
-      "original": {
-        "path": "/home/spacecadet/Documents/projects/vt-colors",
-        "type": "path"
+        "nixpkgs": "nixpkgs_2"
       }
     }
   },
