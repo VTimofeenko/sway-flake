@@ -89,8 +89,8 @@ in
           // multiMap "exec '${pkgs.brightnessctl}/bin/brightnessctl set 10%-'" [ "F7" "XF86MonBrightnessDown" ]
           // multiMap "exec '${pkgs.brightnessctl}/bin/brightnessctl set +10%'" [ "F8" "XF86MonBrightnessUp" ]
           /* Add lower/raise volume mappings */
-          // multiMap "exec ${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ -10%" [ "F2" "XF86AudioLowerVolume" ]
-          // multiMap "exec ${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ +10%" [ "F3" "XF86AudioRaiseVolume" ]
+          // multiMap "exec ${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ -10%" [ "XF86AudioLowerVolume" ]
+          // multiMap "exec ${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ +10%" [ "XF86AudioRaiseVolume" ]
           );
       seat = { "*" = { hide_cursor = "when-typing enable"; }; };
       startup = [

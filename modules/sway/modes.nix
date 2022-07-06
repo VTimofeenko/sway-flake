@@ -4,56 +4,96 @@
 let
   helpers = rec {
     normalModeCmd = "exec pkill yad; mode default";
-    mkHelpNotificationText = mode_def: lib.concatStringsSep "\\n" (lib.mapAttrsToList (name: value: "${name}: ${value}") (lib.filterAttrs (name: value: value != normalModeCmd) mode_def.mode."${mode_def.name}"));
+    /*
+      Constructs attrset that the other functions expect
+    */
+    mkBinding = mapping: _description: {
+      description = _description;
+      action = mapping;
+    };
+    /*
+      Binds multiple keys to same action
+    */
+    multiMap = mapping: _description: key_list:
+      builtins.listToAttrs (map
+        (_:
+          {
+            name = _;
+            value = {
+              description = _description;
+              action = mapping;
+            };
+          }
+        )
+        key_list);
+    mkHelpNotificationText = mode_def: lib.concatStringsSep "\\n" (lib.mapAttrsToList (name: value: "${name}: ${value.description}") (lib.filterAttrs (name: value: value.action != normalModeCmd) mode_def.mode."${mode_def.name}"));
     showHelpNotification = mode_def: "exec --no-startup-id ${pkgs.yad}/bin/yad --html --no-buttons --text \"${mkHelpNotificationText mode_def}\"";
+
+    /*
+      Function that removes the descriptions from the mode making it easier to append
+    */
+    flattenMode = mode: lib.mapAttrs (name: value: value.action) mode;
+    normalModeBindings = multiMap normalModeCmd "Back to normal mode" [ "Return" "Escape" ];
   };
 
   inherit (config.vt-sway) customTarget;
   modes = {
     exit_ctl = {
       name = "exit_ctl";
-      mode = {
+      mode = with helpers; {
         exit_ctl = {
-          "l" = "exec systemctl --user stop ${customTarget.fullname};exec swaymsg exit";
-          "s" = "exec systemctl suspend";
-          "Shift+s" = "exec systemctl shutdown";
-          "Shift+r" = "exec systemctl reboot";
-          "Return" = helpers.normalModeCmd;
-          "Escape" = helpers.normalModeCmd;
-        };
+          "l" = mkBinding "exec systemctl --user stop ${customTarget.fullname};exec swaymsg exit" "Log out of sway";
+          "s" = mkBinding "exec systemctl suspend" "Suspend";
+          "Shift+s" = mkBinding "exec systemctl shutdown" "Shutdown";
+          "r" = mkBinding "exec systemctl reboot" "Reboot";
+        } // normalModeBindings;
       };
     };
     resize = {
       name = "resize";
       mode = {
-        resize = {
-          "h" = "resize shrink width 10 px";
-          "j" = "resize grow height 10 px";
-          "k" = "resize shrink height 10 px";
-          "l" = "resize grow width 10 px";
-          "Shift+h" = "resize shrink width 100 px";
-          "Shift+j" = "resize grow height 100 px";
-          "Shift+k" = "resize shrink height 100 px";
-          "Shift+l" = "resize grow width 100 px";
-          "Return" = helpers.normalModeCmd;
-          "Escape" = helpers.normalModeCmd;
-        };
+        resize = with helpers; {
+          "h" = mkBinding "resize shrink width 10 px" "Shrink width 10 px";
+          "j" = mkBinding "resize shrink height 10 px" "Shrink height 10 px";
+          "k" = mkBinding "resize grow height 10 px" "Grow height 10 px";
+          "l" = mkBinding "resize grow width 10 px" "Grow width 10 px";
+          "Shift+h" = mkBinding "resize shrink width 100 px" "Shrink width 100 px";
+          "Shift+j" = mkBinding "resize shrink height 100 px" "Shrink height 100 px";
+          "Shift+k" = mkBinding "resize grow height 100 px" "Grow height 100 px";
+          "Shift+l" = mkBinding "resize grow width 100 px" "Grow width 100 px";
+        } // normalModeBindings;
+      };
+    };
+    sound_ctl = {
+      name = "sound_ctl";
+      mode = with helpers; {
+        sound_ctl = { }
+          /* Add lower/raise volume mappings */
+          // multiMap "exec ${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ -10%" "Volume up 10%" [ "F2" "XF86AudioLowerVolume" ]
+          // multiMap "exec ${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ +10%" "Volume down 10%" [ "F3" "XF86AudioRaiseVolume" ]
+          // normalModeBindings;
       };
     };
   };
 in
 {
-  wayland.windowManager.sway.config = {
-    modes = modes.resize.mode // modes.exit_ctl.mode;
-    keybindings = lib.mkOptionDefault (
-      let
-        modifier = config.wayland.windowManager.sway.config.modifier;
-      in
-      with modes;
-      {
-        "${modifier}+Shift+r" = "${helpers.showHelpNotification resize}; mode ${resize.name}";
-        "${modifier}+backslash" = ''${helpers.showHelpNotification exit_ctl}; mode ${exit_ctl.name}'';
-      }
-    );
-  };
+  wayland.windowManager.sway.config =
+    let
+      mkAppendableMode = mode_name: { ${mode_name} = helpers.flattenMode modes.${mode_name}.mode.${mode_name}; };
+    in
+    {
+      modes = (mkAppendableMode "resize") // (mkAppendableMode "exit_ctl") // (mkAppendableMode "sound_ctl");
+      keybindings = lib.mkOptionDefault (
+        let
+          modifier = config.wayland.windowManager.sway.config.modifier;
+          mkShowHelpSwitchMode = mode: "${helpers.showHelpNotification mode}; mode ${mode.name}";
+        in
+        with modes;
+        {
+          "${modifier}+Shift+r" = "${helpers.showHelpNotification resize}; mode ${resize.name}";
+          "${modifier}+backslash" = ''${helpers.showHelpNotification exit_ctl}; mode ${exit_ctl.name}'';
+          "${modifier}+Ctrl+s" = (mkShowHelpSwitchMode sound_ctl);
+        }
+      );
+    };
 }
