@@ -8,7 +8,9 @@ let
 in
 {
   # Enable greeter
+  boot.kernelParams = [ "console=tty1" ];
   services.greetd = {
+    vt = 2;
     enable = true;
     settings = {
       default_session = {
