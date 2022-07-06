@@ -20,6 +20,14 @@ let
     gsettings set "$gnome_schema" cursor-theme "$cursor_theme"
     gsettings set "$gnome_schema" font-name "$font_name"
   '';
+
+  # Color-aware wrapper around the sway-rename-workspace
+  sway-rename-workspace-wrapped = pkgs.writeShellScript "sway-rename-workspace-wrapped" ''
+    export TITLE_FOREGROUND_COLOR="#${cfg.semanticColors.defaultBg}"
+    export TITLE_BACKGROUND_COLOR="#${cfg.semanticColors.otherSelector}"
+    export HIGHLIGHTED_FOREGROUND_COLOR="#${cfg.semanticColors.otherSelector}"
+    ${pkgs.sway-rename-workspace}/bin/sway-rename-workspace
+  '';
 in
 {
   imports = [
@@ -68,7 +76,7 @@ in
             /* Launcher */
             "${modifier}+r" = "exec ${pkgs.fuzzel}/bin/fuzzel";
             /* Renaming script */
-            "${modifier}+Ctrl+r" = "exec ${pkgs.sway-rename-workspace}/bin/sway-rename-workspace";
+            "${modifier}+Ctrl+r" = "exec ${sway-rename-workspace-wrapped}";
             /* Custom workspace switching */
             "${modifier}+z" = "workspace prev";
             "${modifier}+x" = "workspace next";

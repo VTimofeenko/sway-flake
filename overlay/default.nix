@@ -15,9 +15,6 @@
         # There was an easier way to do this...
         export PATH=${pkgs.lib.concatStringsSep ":" (map (x: x+"/bin") [ pkgs.bemenu pkgs.jq pkgs.sway] )}:$PATH
 
-        # Declare colors, they will be used in the script itself
-        TITLE_FOREGROUND_COLOR="#685da2"
-        HIGHLIGHTED_FOREGROUND_COLOR="#a89dd7"
         EOF
         # A bit hacky, but better than the escape headache
         cat ${./scripts/rename-workspace} >> sway-rename-workspace

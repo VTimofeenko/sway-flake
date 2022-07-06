@@ -7,6 +7,7 @@ ICONS=('' '' '' '' '')
 NEW_NAME=$(echo "${(j:\n:)ICONS}" | bemenu\
         -n \
         --tf "$TITLE_FOREGROUND_COLOR"\
+        --tb "$TITLE_BACKGROUND_COLOR"\
         --hf "$HIGHLIGHTED_FOREGROUND_COLOR"\
         --prompt "Rename workspace"\
         --list 5)
