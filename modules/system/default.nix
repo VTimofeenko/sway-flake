@@ -4,6 +4,7 @@
 {
   imports = [
     ./greetd.nix
+    ./additional-packages.nix
   ];
   # According to https://blog.patapon.info/nixos-systemd-sway/ this restores a bunch of stuff
   programs.sway.enable = true;
