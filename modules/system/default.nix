@@ -5,15 +5,12 @@
   imports = [
     ./greetd.nix
   ];
-  # Swaylock requires this
-  security.pam.services.swaylock = {
-    text = "auth include login";
-  };
   # According to https://blog.patapon.info/nixos-systemd-sway/ this restores a bunch of stuff
   programs.sway.enable = true;
   programs.dconf.enable = true;
   hardware.opengl.enable = true;
 
+  # Needed for flameshot
   xdg.portal.enable = true;
   xdg.portal.wlr.enable = true;
 
