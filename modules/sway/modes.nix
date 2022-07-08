@@ -67,11 +67,17 @@ let
     sound_ctl = {
       name = "sound_ctl";
       mode = with helpers; {
-        sound_ctl = { }
-          /* Add lower/raise volume mappings */
-          // multiMap "exec ${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ -10%" "Volume up 10%" [ "F2" "XF86AudioLowerVolume" ]
-          // multiMap "exec ${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ +10%" "Volume down 10%" [ "F3" "XF86AudioRaiseVolume" ]
-          // normalModeBindings;
+        sound_ctl = {
+          "m" = mkBinding "" "(m)ute the microphone";
+
+        }
+        /* Silence the output */
+        // multiMap "exec ${pkgs.pulseaudio}/bin/pactl set-sink-mute @DEFAULT_SINK@ toggle" "Toggle silence the output" [ "F1" "s" "XF86AudioMute" ]
+        // multiMap "exec ${pkgs.pulseaudio}/bin/pactl set-source-mute @DEFAULT_SOURCE@ toggle" "Toggle mute the microphone" [ "m" "XF86AudioMicMute" ]
+        /* Add lower/raise volume mappings */
+        // multiMap "exec ${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ -10%" "Volume up 10%" [ "F2" "XF86AudioLowerVolume" ]
+        // multiMap "exec ${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ +10%" "Volume down 10%" [ "F3" "XF86AudioRaiseVolume" ]
+        // normalModeBindings;
       };
     };
   };
