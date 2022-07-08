@@ -85,7 +85,7 @@ in
             "${modifier}+Shift+Return" = ''exec --no-startup-id ${pkgs.scratchpad-terminal}/bin/scratchpad-terminal ${terminal} "scratchpad_term"'';
             "${modifier}+Shift+f" = "floating toggle";
             # Launch something in (t)erminal
-            "${modifier}+t" = "exec --no-startup-id ${pkgs.bemenu}/bin/bemenu-run --fork --no-exec | xargs ${terminal}";
+            "${modifier}+t" = "exec --no-startup-id ${pkgs.bemenu}/bin/bemenu-run --fork --no-exec | ${pkgs.moreutils}/bin/ifne xargs ${terminal}";
           }
           /* Brightnessctl should be called for both F7-8 and fn-F7-8 */
           // multiMap "exec '${pkgs.brightnessctl}/bin/brightnessctl set 10%-'" [ "F7" "XF86MonBrightnessDown" ]
