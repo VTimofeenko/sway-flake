@@ -35,8 +35,15 @@ let
     flattenMode = mode: lib.mapAttrs (name: value: value.action) mode;
     normalModeBindings = multiMap normalModeCmd "Back to normal mode" [ "Return" "Escape" ];
   };
+  # Color-aware wrapper around the sway-rename-workspace
+  sway-rename-workspace-wrapped = pkgs.writeShellScript "sway-rename-workspace-wrapped" ''
+    export TITLE_FOREGROUND_COLOR="#${semanticColors.defaultBg}"
+    export TITLE_BACKGROUND_COLOR="#${semanticColors.otherSelector}"
+    export HIGHLIGHTED_FOREGROUND_COLOR="#${semanticColors.otherSelector}"
+    ${pkgs.sway-rename-workspace}/bin/sway-rename-workspace
+  '';
 
-  inherit (config.vt-sway) customTarget;
+  inherit (config.vt-sway) customTarget semanticColors;
   modes = {
     exit_ctl = {
       name = "exit_ctl";
@@ -64,6 +71,14 @@ let
         } // normalModeBindings;
       };
     };
+    workspace_edit = {
+      name = "workspace_edit";
+      mode = with helpers; {
+        workspace_edit = {
+          "r" = mkBinding "exec --no-startup-id ${sway-rename-workspace-wrapped}; ${normalModeCmd}" "Rename workspace";
+        } // normalModeBindings;
+      };
+    };
     sound_ctl = {
       name = "sound_ctl";
       mode = with helpers; {
@@ -85,7 +100,7 @@ in
       mkAppendableMode = mode_name: { ${mode_name} = helpers.flattenMode modes.${mode_name}.mode.${mode_name}; };
     in
     {
-      modes = (mkAppendableMode "resize") // (mkAppendableMode "exit_ctl") // (mkAppendableMode "sound_ctl");
+      modes = (mkAppendableMode "resize") // (mkAppendableMode "exit_ctl") // (mkAppendableMode "sound_ctl") // (mkAppendableMode "workspace_edit");
       keybindings = lib.mkOptionDefault (
         let
           modifier = config.wayland.windowManager.sway.config.modifier;
@@ -96,6 +111,7 @@ in
           "${modifier}+Shift+r" = "${helpers.showHelpNotification resize}; mode ${resize.name}";
           "${modifier}+backslash" = ''${helpers.showHelpNotification exit_ctl}; mode ${exit_ctl.name}'';
           "${modifier}+Ctrl+s" = (mkShowHelpSwitchMode sound_ctl);
+          "${modifier}+Ctrl+w" = (mkShowHelpSwitchMode workspace_edit);
         }
       );
     };
