@@ -51,10 +51,6 @@ in
           pointer_accel = "0.4";
         };
       };
-      # Output configuration
-      output = {
-        "eDP-1" = { "scale" = "1"; };
-      };
       # Custom keybindings
       keybindings =
         let
