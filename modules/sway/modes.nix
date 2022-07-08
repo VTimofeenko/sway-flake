@@ -69,7 +69,6 @@ let
       mode = with helpers; {
         sound_ctl = {
           "m" = mkBinding "" "(m)ute the microphone";
-
         }
         /* Silence the output */
         // multiMap "exec ${pkgs.pulseaudio}/bin/pactl set-sink-mute @DEFAULT_SINK@ toggle" "Toggle silence the output" [ "F1" "s" "XF86AudioMute" ]
