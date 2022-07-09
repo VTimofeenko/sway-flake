@@ -3,7 +3,7 @@ waybarTemplate: { pkgs, config, ... }:
 let
   inherit (config.vt-sway) customTarget;
   /* Function that turns an icon into a <span> to force a specific font */
-  mkSpan = icon: "<span font=\"Font Awesome 5 Free Solid\">${icon}</span>";
+  mkSpan = icon: "<span>${icon}</span>";
   start-waybar = pkgs.writeShellScriptBin "start-waybar" ''
     export SWAYSOCK=/run/user/$(${pkgs.coreutils}/bin/id -u)/sway-ipc.$(${pkgs.coreutils}/bin/id -u).$(${pkgs.procps}/bin/pgrep -f 'sway$').sock
     ${pkgs.waybar}/bin/waybar
@@ -58,8 +58,8 @@ in
         "idle_inhibitor" = {
           "format" = "{icon}";
           "format-icons" = {
-            "activated" = mkSpan "";
-            "deactivated" = mkSpan "";
+            "activated" = mkSpan "";
+            "deactivated" = mkSpan "";
           };
         };
         "temperature" = {
@@ -86,7 +86,7 @@ in
           "format-icons" = [ "" "" "" "" "" ];
         };
         "network" = {
-          "format-wifi" = mkSpan " " + " {essid}";
+          "format-wifi" = mkSpan "" + " {essid}";
           "format-ethernet" = mkSpan "" + " {ipaddr}";
           "tooltip-format" = "{ifname} via {gwaddr} ";
           "format-linked" = "{ifname} (No IP)";
@@ -94,19 +94,19 @@ in
         };
         "pulseaudio" = {
           "format" = mkSpan "{icon}" + " {volume}%";
-          "format-bluetooth" = "{volume}% {icon} {format_source}";
-          "format-bluetooth-muted" = " {icon} {format_source}";
-          "format-muted" = "";
+          "format-bluetooth" = "{volume}% {icon} {format_source}";
+          "format-bluetooth-muted" = " {icon} {format_source}";
+          "format-muted" = "";
           "format-source" = "";
           "format-source-muted" = "";
           "format-icons" = {
-            "headphone" = "";
+            "headphone" = "";
             "hands-free" = "";
             "headset" = "";
             "phone" = "";
             "portable" = "";
             "car" = "";
-            "default" = [ "" "" "" ];
+            "default" = [ "" "奔" "墳" ];
           };
           "on-click" = "pavucontrol";
         };
