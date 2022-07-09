@@ -120,5 +120,7 @@ in
     dmenu
     fuzzel
     swaybg
+    # For albert unit conversion
+    units
   ];
 }
