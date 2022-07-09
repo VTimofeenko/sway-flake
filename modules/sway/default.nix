@@ -72,6 +72,8 @@ in
             "${modifier}+Shift+f" = "floating toggle";
             # Launch something in (t)erminal
             "${modifier}+t" = "exec --no-startup-id ${pkgs.bemenu}/bin/bemenu-run --fork --no-exec | ${pkgs.moreutils}/bin/ifne xargs ${terminal}";
+            # Override switching between floating and tiled so that it does not collide with language switch
+            "${modifier}+u" = "focus mode_toggle";
           }
           /* Brightnessctl should be called for both F7-8 and fn-F7-8 */
           // multiMap "exec '${pkgs.brightnessctl}/bin/brightnessctl set 10%-'" [ "F7" "XF86MonBrightnessDown" ]
