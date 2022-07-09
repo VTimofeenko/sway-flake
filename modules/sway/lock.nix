@@ -10,7 +10,7 @@ let
     -k: show keyboard layout
     -c: color
   */
-  lockCmd = "${pkgs.swaylock}/bin/swaylock -fF -k -c 000000";
+  lockCmd = "${pkgs.sway}/bin/swaymsg input '*' xkb_switch_layout 0 && ${pkgs.swaylock}/bin/swaylock -fF -k -c 000000";
 in
 {
   wayland.windowManager.sway.config.keybindings = lib.mkOptionDefault (
