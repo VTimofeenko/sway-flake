@@ -62,7 +62,7 @@ in
         lib.mkOptionDefault
           ({
             /* Launcher */
-            "${modifier}+r" = "exec ${pkgs.fuzzel}/bin/fuzzel";
+            "${modifier}+Ctrl+r" = "exec --no-startup-id ${pkgs.albert}/bin/albert show";
             /* Custom workspace switching */
             "${modifier}+z" = "workspace prev";
             "${modifier}+x" = "workspace next";
@@ -89,6 +89,9 @@ in
         { command = "${set_gsettings}"; }
         {
           command = "swaybg --image /run/current-system/sw/share/backgrounds/sway/Sway_Wallpaper_Blue_768x1024.png --mode fill";
+        }
+        {
+          command = "systemd-cat --identifier=albert ${pkgs.albert}/bin/albert";
         }
       ];
       terminal = "${pkgs.kitty}/bin/kitty";
