@@ -62,7 +62,7 @@ in
         lib.mkOptionDefault
           ({
             /* Launcher */
-            "${modifier}+Ctrl+r" = "exec --no-startup-id ${pkgs.albert}/bin/albert show";
+            "${modifier}+r" = "exec --no-startup-id ${pkgs.albert}/bin/albert show";
             /* Custom workspace switching */
             "${modifier}+z" = "workspace prev";
             "${modifier}+x" = "workspace next";
