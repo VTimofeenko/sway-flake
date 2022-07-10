@@ -67,7 +67,7 @@ in
           "critical-threshold" = 80;
           "format-critical" = mkSpan "{icon}" + " {temperatureC}°C";
           "format" = mkSpan "{icon}" + " {temperatureC}°C";
-          "format-icons" = [ "" "" "" ];
+          "format-icons" = [ "" "" "" ];
         };
         "cpu" = {
           "format" = mkSpan "" + " {usage}%";
@@ -86,11 +86,11 @@ in
           "format-icons" = [ "  " "  " "  " "  " "  " ];
         };
         "network" = {
-          "format-wifi" = mkSpan "" + " {essid}";
-          "format-ethernet" = mkSpan "" + " {ipaddr}";
+          "format-wifi" = mkSpan " " + " {essid}";
+          "format-ethernet" = mkSpan " " + " {ipaddr}";
           "tooltip-format" = "{ifname} via {gwaddr} ";
           "format-linked" = "{ifname} (No IP)";
-          "format-disconnected" = mkSpan "⚠" + " Disconnected";
+          "format-disconnected" = mkSpan " " + " Disconnected";
         };
         "pulseaudio" = {
           "format" = mkSpan "{icon}" + " {volume}%";
