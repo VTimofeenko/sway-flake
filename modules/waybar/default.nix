@@ -83,7 +83,7 @@ in
           "format-charging" = mkSpan "{icon}" + " {capacity}% " + mkSpan "";
           "format-plugged" = mkSpan "{icon}" + " {capacity}% " + mkSpan "";
           "format-alt" = "{time} " + mkSpan "{icon}";
-          "format-icons" = [ "" "" "" "" "" ];
+          "format-icons" = [ "  " "  " "  " "  " "  " ];
         };
         "network" = {
           "format-wifi" = mkSpan "" + " {essid}";
