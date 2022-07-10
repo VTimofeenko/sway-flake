@@ -5,6 +5,7 @@ with lib;
     ./custom-target.nix
   ];
   options.vt-sway = {
+    enableBrightness = mkEnableOption "enable brightness controls";
     customTarget = rec {
       name = mkOption {
         description = "Name of custom target to bind user services to";

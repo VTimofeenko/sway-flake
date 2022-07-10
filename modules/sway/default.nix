@@ -75,9 +75,14 @@ in
             # Override switching between floating and tiled so that it does not collide with language switch
             "${modifier}+u" = "focus mode_toggle";
           }
+          // (if cfg.enableBrightness then
           /* Brightnessctl should be called for both F7-8 and fn-F7-8 */
-          // multiMap "exec '${pkgs.brightnessctl}/bin/brightnessctl set 10%-'" [ "F7" "XF86MonBrightnessDown" ]
-          // multiMap "exec '${pkgs.brightnessctl}/bin/brightnessctl set +10%'" [ "F8" "XF86MonBrightnessUp" ]
+            multiMap "exec '${pkgs.brightnessctl}/bin/brightnessctl set 10%-'" [ "F7" "XF86MonBrightnessDown" ]
+              //
+              multiMap "exec '${pkgs.brightnessctl}/bin/brightnessctl set +10%'" [ "F8" "XF86MonBrightnessUp" ]
+          else
+            { }
+          )
           /* Add lower/raise volume mappings */
           // multiMap "exec ${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ -10%" [ "XF86AudioLowerVolume" ]
           // multiMap "exec ${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ +10%" [ "XF86AudioRaiseVolume" ]
