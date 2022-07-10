@@ -24,6 +24,10 @@
       url = "github:mnussbaum/base16-waybar";
       flake = false;
     };
+    xremap-flake = {
+      url = "github:xremap/nix-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
   outputs = { self, nixpkgs, home-manager, ... }@inputs:
     let
@@ -66,7 +70,7 @@
 
       nixosModules = {
         default = import ./modules inputs schemeName;
-        system = import ./modules/system;
+        system = import ./modules/system inputs;
       };
     };
 }

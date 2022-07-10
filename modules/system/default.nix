@@ -1,10 +1,12 @@
 # This module contains system-wide settings for this flake
-{ pkgs, ... }:
+inputs: { pkgs, ... }:
 
 {
   imports = [
     ./greetd.nix
     ./additional-packages.nix
+    ./xremap.nix
+    inputs.xremap-flake.nixosModules.default
   ];
   # According to https://blog.patapon.info/nixos-systemd-sway/ this restores a bunch of stuff
   programs.sway.enable = true;
