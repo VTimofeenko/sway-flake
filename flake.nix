@@ -53,6 +53,10 @@
             type = "app";
             program = "${self.packages.${system}.sway-rename-workspace}/bin/sway-rename-workspace";
           };
+          sway-change-workspace-number = {
+            type = "app";
+            program = "${self.packages.${system}.sway-change-workspace-number}/bin/sway-change-workspace-number";
+          };
           scratchpad-terminal = {
             type = "app";
             program = "${self.packages.${system}.scratchpad-terminal}/bin/scratchpad-terminal";
@@ -65,7 +69,7 @@
           localPkgs = import ./overlay { pkgs = final; };
         in
         {
-          inherit (localPkgs) sway-rename-workspace scratchpad-terminal;
+          inherit (localPkgs) sway-rename-workspace sway-change-workspace-number scratchpad-terminal;
         };
 
       nixosModules = {

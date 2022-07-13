@@ -1,0 +1,70 @@
+function workspaceExists () {
+        swaymsg -t get_workspaces | jq --exit-status -c ".[]| select(.num == $1)" >/dev/null 2>&1
+        return $?
+}
+
+function getWorkspaceFullName () {
+        swaymsg -t get_workspaces | jq\
+                --raw-output\
+                --exit-status\
+                -c ".[]| select(.num == $1) | .name"
+
+}
+
+function getWorkspaceHumanName () {
+        swaymsg -t get_workspaces | jq --raw-output\
+                --exit-status\
+                -c ".[]| select(.num == $1) | .name | split(\": \") | .[1] // empty"
+}
+
+function _rename(){
+        swaymsg rename workspace "$1" to "$2"
+}
+
+
+NEW_NUMBER=$(echo '' | bemenu\
+        -n \
+        --tf "$TITLE_FOREGROUND_COLOR"\
+        --tb "$TITLE_BACKGROUND_COLOR"\
+        --hf "$HIGHLIGHTED_FOREGROUND_COLOR"\
+        --prompt "Change number to")
+# Handle user cancellation
+if [ $? != 0 ]; then
+        exit
+fi
+# Handle not an int
+if ! [[ $NEW_NUMBER =~ '^[0-9]+$' ]]; then
+        exit
+fi
+CURRENT_WORKSPACE_JSON=$(swaymsg -r -t get_workspaces | jq -c '.[] | select(.focused == true)')
+CURRENT_WORKSPACE_NUM=$(echo $CURRENT_WORKSPACE_JSON | jq -c '.num')
+CURRENT_WORKSPACE_HUMAN_NAME=$(getWorkspaceHumanName $CURRENT_WORKSPACE_NUM)
+CURRENT_WORKSPACE_FULL_NAME=$(getWorkspaceFullName $CURRENT_WORKSPACE_NUM)
+
+TARGET_NAME="${NEW_NUMBER}"  # Target name after all renames
+if [[ ! -z ${CURRENT_WORKSPACE_HUMAN_NAME} ]]; then
+        # Preserve human name if exists
+        TARGET_NAME="${TARGET_NAME}: ${CURRENT_WORKSPACE_HUMAN_NAME}"
+fi
+
+if (workspaceExists "$NEW_NUMBER"); then
+        # Handle case when NEW_NUMBER is taken
+        TEMP_NAME="999"
+        # swaymsg rename workspace "${CURRENT_WORKSPACE_NAME}" to "999"
+        # swaymsg rename workspace "${CURRENT_WORKSPACE_NAME}" to "999"
+        OTHER_HUMAN_NAME=$(getWorkspaceHumanName $NEW_NUMBER)
+        OTHER_FULL_NAME=$(getWorkspaceFullName $NEW_NUMBER)
+
+        OTHER_TARGET_NAME="${CURRENT_WORKSPACE_NUM}"
+
+
+        if [[ ! -z ${OTHER_HUMAN_NAME} ]]; then
+                # Other name is not empty, need to reconstruct it
+                OTHER_TARGET_NAME="${OTHER_TARGET_NAME}: ${OTHER_HUMAN_NAME}"
+        fi
+        _rename "${CURRENT_FULL_NAME}" "${TEMP_NAME}"
+        _rename "${OTHER_FULL_NAME}" "${OTHER_TARGET_NAME}"
+        _rename "${TEMP_NAME}" "${TARGET_NAME}"
+else
+        _rename "${CURRENT_WORKSPACE_FULL_NAME}" "${TARGET_NAME}"
+fi
