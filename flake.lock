@@ -137,11 +137,11 @@
     },
     "nixpkgs_3": {
       "locked": {
-        "lastModified": 1660464579,
-        "narHash": "sha256-kzA9rwh0wS6CwUnFHAQ7dhJCowMPfRbvixVeOKnUmjo=",
+        "lastModified": 1660817299,
+        "narHash": "sha256-0QZE5FYLOyTEpKobPk32gxAQBtYs/nAfGx3PK+x6bXI=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "b02538b16f6c5e1dbfce1033b27946e25c019b3b",
+        "rev": "b42e50fe36242b1b205a7d501b7911d698218086",
         "type": "github"
       },
       "original": {
@@ -163,16 +163,16 @@
     "xremap": {
       "flake": false,
       "locked": {
-        "lastModified": 1660470307,
-        "narHash": "sha256-3E45PKWRbhpYIsg14lISUegw5lrzIVKfaSE6Y7j1M9k=",
+        "lastModified": 1660632923,
+        "narHash": "sha256-JY6Ze10skXbb3MdyPrjZroI0VSEhtFX78v8rvkYqods=",
         "owner": "k0kubun",
         "repo": "xremap",
-        "rev": "54e9730ed5fa81a604eebe291899337411e259c9",
+        "rev": "4ebce8ee145b858bd86f2bfdbe64d5fcb9fc80fc",
         "type": "github"
       },
       "original": {
         "owner": "k0kubun",
-        "ref": "v0.6.1",
+        "ref": "v0.7.2",
         "repo": "xremap",
         "type": "github"
       }
@@ -186,11 +186,11 @@
         "xremap": "xremap"
       },
       "locked": {
-        "lastModified": 1660498057,
-        "narHash": "sha256-g2Bk/SvQVIJQ2TNuwkiW2sDV1OhzAK0S1OslO/sFKP4=",
+        "lastModified": 1660939001,
+        "narHash": "sha256-glaZE69U/sV1MfjOjmMELOnviqzD/EIaO85bkhOt4cY=",
         "owner": "xremap",
         "repo": "nix-flake",
-        "rev": "dbd8f992051901ce1b9c8fba7eeee5e789afae28",
+        "rev": "db3d0484da11c1a0275a099ba3f2b803b41c20de",
         "type": "github"
       },
       "original": {
