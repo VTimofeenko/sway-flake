@@ -70,6 +70,19 @@ in
           };
         }
         {
+          # This set of mapping makes ctrl+w work like ctrl+backspace and ctrl+k as ctrl+w
+          name = "Remap browser shortcuts";
+          application = {
+            "only" = [ "Brave-browser" "Firefox" ];
+          };
+          remap = {
+            # K = kill
+            "CTRL_L-Shift-k" = "C-Shift-w";
+            "CTRL_L-k" = "C-w";
+            "CTRL_L-w" = "C-Backspace";
+          };
+        }
+        {
           name = "Brave fix incognito mode";
           application = {
             "only" = "Brave-browser";
