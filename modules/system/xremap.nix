@@ -22,29 +22,32 @@ in
             "not" = "kitty";
           };
           remap = {
-            "C-a" = "home";
-            "C-e" = "end";
+            "CTRL_L-a" = "home";
+            "CTRL_L-e" = "end";
             /* Same, but with selection */
-            "C-Shift-a" = "Shift-home";
-            "C-Shift-e" = "Shift-end";
+            "CTRL_L-Shift-a" = "Shift-home";
+            "CTRL_L-Shift-e" = "Shift-end";
             # Select all
-            "M-a" = "c-a";
+            "ALT_L-a" = "c-a";
             # Copy
-            "M-c" = "c-c";
+            "ALT_L-c" = "c-c";
             # Paste
-            "M-v" = "c-v";
-            "M-z" = "c-z";
+            "ALT_L-v" = "c-v";
+            # Cut
+            "ALT_L-x" = "c-x";
+            # Undo
+            "ALT_L-z" = "c-z";
           };
         }
         {
           name = "Right alt + hjkl = arrows";
           remap = {
-            "M_R-h" = "Left";
-            "M_R-j" = "Down";
-            "M_R-k" = "Up";
-            "M_R-l" = "Right";
-            "M_R-u" = "Pageup";
-            "M_R-d" = "Pagedown";
+            "ALT_R-h" = "Left";
+            "ALT_R-j" = "Down";
+            "ALT_R-k" = "Up";
+            "ALT_R-l" = "Right";
+            "ALT_R-u" = "Pageup";
+            "ALT_R-d" = "Pagedown";
           };
         }
         {
