@@ -73,7 +73,7 @@ in
           # This set of mapping makes ctrl+w work like ctrl+backspace and ctrl+k as ctrl+w
           name = "Remap browser shortcuts";
           application = {
-            "only" = [ "Brave-browser" "Firefox" ];
+            "only" = [ "Brave-browser" "firefox" ];
           };
           remap = {
             # K = kill
