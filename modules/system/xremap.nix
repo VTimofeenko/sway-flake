@@ -33,6 +33,7 @@ in
             "ALT_L-c" = "c-c";
             # Paste
             "ALT_L-v" = "c-v";
+            "CTRL_L-Shift-v" = "Shift-Insert";
             # Cut
             "ALT_L-x" = "c-x";
             # Undo
