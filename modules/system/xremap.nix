@@ -90,7 +90,6 @@ in
           remap = {
             "C-Shift-p" = "C-Shift-n";
           };
-
         }
       ];
     };
