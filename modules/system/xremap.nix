@@ -77,8 +77,8 @@ in
           };
           remap = {
             # K = kill
-            "CTRL_L-Shift-k" = "C-Shift-w";
-            "CTRL_L-k" = "C-w";
+            "C-Shift-k" = "C-Shift-w";
+            "C-k" = "C-w";
             "CTRL_L-w" = "C-Backspace";
           };
         }
