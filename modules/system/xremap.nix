@@ -43,7 +43,7 @@ in
         {
           name = "Bypass remaps";
           remap = {
-            "CTRL_L-Shift-Escape" = { escape_next_key = true; };
+            "CTRL_L-Shift-Esc" = { escape_next_key = true; };
           };
         }
         {
