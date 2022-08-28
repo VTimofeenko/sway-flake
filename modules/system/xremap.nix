@@ -41,6 +41,12 @@ in
           };
         }
         {
+          name = "Bypass remaps";
+          remap = {
+            "CTRL_L-Shift-Escape" = { escape_next_key = true; };
+          };
+        }
+        {
           name = "Right alt + hjkl = arrows";
           remap = {
             "ALT_R-h" = "Left";
