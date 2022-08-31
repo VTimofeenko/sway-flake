@@ -31,13 +31,17 @@ in
             "ALT_L-a" = "c-a";
             # Copy
             "ALT_L-c" = "c-c";
-            # Paste
-            "ALT_L-v" = "c-v";
-            "CTRL_L-Shift-v" = "Shift-Insert";
             # Cut
             "ALT_L-x" = "c-x";
             # Undo
             "ALT_L-z" = "c-z";
+          };
+        }
+        {
+          name = "Make paste by control-shift-v";
+          remap = {
+            "CTRL_L-Shift-v" = "Shift-Insert";
+            "ALT_L-v" = "Shift-Insert";
           };
         }
         {
