@@ -19,7 +19,7 @@ in
         {
           name = "Emacs-like shortcuts";
           application = {
-            "not" = "kitty";
+            "not" = [ "kitty" "Emacs" ];
           };
           remap = {
             "CTRL_L-a" = "home";
