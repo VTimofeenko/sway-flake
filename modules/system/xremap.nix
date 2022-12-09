@@ -6,7 +6,6 @@ in
   services.xremap = {
     withSway = true;
     userName = username;
-    deviceName = "AT Translated Set 2 keyboard";
     config = {
       modmap = [
         {
