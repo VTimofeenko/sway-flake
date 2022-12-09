@@ -48,7 +48,9 @@ in
       };
       "clock" = {
         /* "-d" removes leading zero */
-        "format" = "{:%b %-d %R}";
+        # No longer works:
+        # https://github.com/Alexays/Waybar/issues/1696
+        "format" = "{:%b %d %R}";
         "tooltip" = false;
       };
       "sway/mode" = {
