@@ -42,74 +42,72 @@ in
       modules-center = [ ];
       modules-right = [ "tray" "idle_inhibitor" "pulseaudio" "network" "temperature" "cpu" "sway/language" "battery" "clock" ];
 
-      modules = {
-        "sway/workspaces" = {
-          disable-scroll = true;
-          all-outputs = true;
+      "sway/workspaces" = {
+        disable-scroll = true;
+        all-outputs = true;
+      };
+      "clock" = {
+        /* "-d" removes leading zero */
+        "format" = "{:%b %-d %R}";
+        "tooltip" = false;
+      };
+      "sway/mode" = {
+        "format" = "<span style=\"italic\">{}</span>";
+      };
+      "idle_inhibitor" = {
+        "format" = "{icon}";
+        "format-icons" = {
+          "activated" = mkSpan "";
+          "deactivated" = mkSpan "";
         };
-        "clock" = {
-          /* "-d" removes leading zero */
-          "format" = "{:%b %-d %R}";
-          "tooltip" = false;
+      };
+      "temperature" = {
+        "thermal-zone" = 3;
+        "critical-threshold" = 80;
+        "format-critical" = mkSpan "{icon}" + " {temperatureC}°C";
+        "format" = mkSpan "{icon}" + " {temperatureC}°C";
+        "format-icons" = [ "" "" "" ];
+      };
+      "cpu" = {
+        "format" = mkSpan "" + " {usage}%";
+        "tooltip" = false;
+      };
+      "battery" = {
+        "states" = {
+          "good" = 95;
+          "warning" = 30;
+          "critical" = 15;
         };
-        "sway/mode" = {
-          "format" = "<span style=\"italic\">{}</span>";
+        "format" = mkSpan "{icon}" + " {capacity}%";
+        "format-charging" = mkSpan "{icon}" + " {capacity}% " + mkSpan "";
+        "format-plugged" = mkSpan "{icon}" + " {capacity}% " + mkSpan "";
+        "format-alt" = "{time} " + mkSpan "{icon}";
+        "format-icons" = [ "  " "  " "  " "  " "  " ];
+      };
+      "network" = {
+        "format-wifi" = mkSpan " " + " {essid}";
+        "format-ethernet" = mkSpan " " + " {ipaddr}";
+        "tooltip-format" = "{ifname} via {gwaddr} ";
+        "format-linked" = "{ifname} (No IP)";
+        "format-disconnected" = mkSpan " " + " Disconnected";
+      };
+      "pulseaudio" = {
+        "format" = mkSpan "{icon}" + " {volume}%";
+        "format-bluetooth" = "{volume}% {icon} {format_source}";
+        "format-bluetooth-muted" = " {icon} {format_source}";
+        "format-muted" = "";
+        "format-source" = "";
+        "format-source-muted" = "";
+        "format-icons" = {
+          "headphone" = "";
+          "hands-free" = "";
+          "headset" = "";
+          "phone" = "";
+          "portable" = "";
+          "car" = "";
+          "default" = [ "" "奔" "墳" ];
         };
-        "idle_inhibitor" = {
-          "format" = "{icon}";
-          "format-icons" = {
-            "activated" = mkSpan "";
-            "deactivated" = mkSpan "";
-          };
-        };
-        "temperature" = {
-          "thermal-zone" = 3;
-          "critical-threshold" = 80;
-          "format-critical" = mkSpan "{icon}" + " {temperatureC}°C";
-          "format" = mkSpan "{icon}" + " {temperatureC}°C";
-          "format-icons" = [ "" "" "" ];
-        };
-        "cpu" = {
-          "format" = mkSpan "" + " {usage}%";
-          "tooltip" = false;
-        };
-        "battery" = {
-          "states" = {
-            "good" = 95;
-            "warning" = 30;
-            "critical" = 15;
-          };
-          "format" = mkSpan "{icon}" + " {capacity}%";
-          "format-charging" = mkSpan "{icon}" + " {capacity}% " + mkSpan "";
-          "format-plugged" = mkSpan "{icon}" + " {capacity}% " + mkSpan "";
-          "format-alt" = "{time} " + mkSpan "{icon}";
-          "format-icons" = [ "  " "  " "  " "  " "  " ];
-        };
-        "network" = {
-          "format-wifi" = mkSpan " " + " {essid}";
-          "format-ethernet" = mkSpan " " + " {ipaddr}";
-          "tooltip-format" = "{ifname} via {gwaddr} ";
-          "format-linked" = "{ifname} (No IP)";
-          "format-disconnected" = mkSpan " " + " Disconnected";
-        };
-        "pulseaudio" = {
-          "format" = mkSpan "{icon}" + " {volume}%";
-          "format-bluetooth" = "{volume}% {icon} {format_source}";
-          "format-bluetooth-muted" = " {icon} {format_source}";
-          "format-muted" = "";
-          "format-source" = "";
-          "format-source-muted" = "";
-          "format-icons" = {
-            "headphone" = "";
-            "hands-free" = "";
-            "headset" = "";
-            "phone" = "";
-            "portable" = "";
-            "car" = "";
-            "default" = [ "" "奔" "墳" ];
-          };
-          "on-click" = "pavucontrol";
-        };
+        "on-click" = "pavucontrol";
       };
     }];
     style = ''
