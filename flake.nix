@@ -2,8 +2,8 @@
   description = "Nix flake that contains my sway config";
 
   inputs = {
-    nixpkgs.url = "nixpkgs/nixos-22.05";
-    home-manager.url = "github:rycee/home-manager/release-22.05";
+    nixpkgs.url = "nixpkgs/nixos-22.11";
+    home-manager.url = "github:rycee/home-manager/release-22.11";
     # Colors
     base16 = {
       url = "github:SenchoPens/base16.nix";
