@@ -16,7 +16,7 @@ in
       tab_bar_min_tabs = 1;
       tab_bar_edge = "bottom";
       tab_title_template = "{fmt.fg.white} {title.split()[0]} ";
-      active_tab_title_template = "{fmt.fg.black}{fmt.bg.cyan} {title.split()[0]} ";
+      active_tab_title_template = "{fmt.fg.black}{fmt.bg.blue} {title.split()[0]} ";
     };
     keybindings = {
       # Opens a new Kitty window in the current working directory
