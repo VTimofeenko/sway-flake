@@ -17,5 +17,6 @@ in
     makoModule
     waybarModule
     ./flameshot
+    ./kitty
   ];
 }
