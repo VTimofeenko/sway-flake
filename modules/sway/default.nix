@@ -3,6 +3,18 @@
 let
   cfg = config.vt-sway;
   inherit (config.vt-sway) customTarget;
+  patched-sway = pkgs.sway.overrideAttrs (old:
+    {
+      patches =
+        (
+          old.patches or [ ]
+        )
+        ++
+        [
+          ./hide_cursor.patch
+        ];
+    }
+  );
 
   set_gsettings = pkgs.writeShellScript "set_gsettings" ''
     PATH=${pkgs.glib}/bin:$PATH
@@ -30,6 +42,7 @@ in
   # These options are taken from https://nix-community.github.io/home-manager/options.html
   wayland.windowManager.sway = {
     enable = true;
+    package = patched-sway;
     # Assign windows to workspaces
     config = {
       bars = [ ]; # Set to empty to disable the default. Waybar is managed separately.

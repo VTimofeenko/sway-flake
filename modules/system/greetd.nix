@@ -1,8 +1,22 @@
 { pkgs, lib, ... }:
 
 let
+  patched-sway = pkgs.sway.overrideAttrs (old:
+    {
+      patches =
+        (
+          old.patches or [ ]
+        )
+        ++
+        [
+          ./hide_cursor.patch
+        ];
+    }
+  );
+
+
   sway-launcher = pkgs.writeShellScript "sway-launcher" ''
-    exec systemd-cat --identifier=sway sway
+    exec systemd-cat --identifier=sway ${patched-sway}/bin/sway
     systemctl --user stop sway-wm.target
   '';
 in
