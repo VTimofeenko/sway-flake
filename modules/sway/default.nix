@@ -3,7 +3,7 @@
 let
   cfg = config.vt-sway;
   inherit (config.vt-sway) customTarget;
-  inherit (import ./sway-with-patches.nix pkgs) patched-sway;
+  inherit (import ../../overlay/sway-with-patches.nix pkgs) patched-sway;
 
   set_gsettings = pkgs.writeShellScript "set_gsettings" ''
     PATH=${pkgs.glib}/bin:$PATH

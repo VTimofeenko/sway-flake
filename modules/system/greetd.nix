@@ -1,7 +1,7 @@
 { pkgs, lib, ... }:
 
 let
-  inherit (import ./sway-with-patches.nix pkgs) patched-sway;
+  inherit (import ../../overlay/sway-with-patches.nix pkgs) patched-sway;
 
 
   sway-launcher = pkgs.writeShellScript "sway-launcher" ''
