@@ -1,18 +1,7 @@
 { pkgs, lib, ... }:
 
 let
-  patched-sway = pkgs.sway.overrideAttrs (old:
-    {
-      patches =
-        (
-          old.patches or [ ]
-        )
-        ++
-        [
-          ./hide_cursor.patch
-        ];
-    }
-  );
+  inherit (import ./sway-with-patches.nix pkgs) patched-sway;
 
 
   sway-launcher = pkgs.writeShellScript "sway-launcher" ''

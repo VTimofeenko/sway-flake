@@ -3,18 +3,7 @@
 let
   cfg = config.vt-sway;
   inherit (config.vt-sway) customTarget;
-  patched-sway = pkgs.sway.overrideAttrs (old:
-    {
-      patches =
-        (
-          old.patches or [ ]
-        )
-        ++
-        [
-          ./hide_cursor.patch
-        ];
-    }
-  );
+  inherit (import ./sway-with-patches.nix pkgs) patched-sway;
 
   set_gsettings = pkgs.writeShellScript "set_gsettings" ''
     PATH=${pkgs.glib}/bin:$PATH
