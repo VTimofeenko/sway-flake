@@ -35,18 +35,21 @@ let
     flattenMode = mode: lib.mapAttrs (name: value: value.action) mode;
     normalModeBindings = multiMap normalModeCmd "Back to normal mode" [ "Return" "Escape" ];
   };
+
+  overlay = (import ../../overlay) (pkgs);
+
   # Color-aware wrapper around the sway-rename-workspace
   sway-rename-workspace-wrapped = pkgs.writeShellScript "sway-rename-workspace-wrapped" ''
     export TITLE_FOREGROUND_COLOR="#${semanticColors.defaultBg}"
     export TITLE_BACKGROUND_COLOR="#${semanticColors.otherSelector}"
     export HIGHLIGHTED_FOREGROUND_COLOR="#${semanticColors.otherSelector}"
-    ${pkgs.sway-rename-workspace}/bin/sway-rename-workspace
+    ${overlay.sway-rename-workspace}/bin/sway-rename-workspace
   '';
   sway-change-workspace-number-wrapped = pkgs.writeShellScript "sway-change-workspace-number-wrapped" ''
     export TITLE_FOREGROUND_COLOR="#${semanticColors.defaultBg}"
     export TITLE_BACKGROUND_COLOR="#${semanticColors.otherSelector}"
     export HIGHLIGHTED_FOREGROUND_COLOR="#${semanticColors.otherSelector}"
-    ${pkgs.sway-change-workspace-number}/bin/sway-change-workspace-number
+    ${overlay.sway-change-workspace-number}/bin/sway-change-workspace-number
   '';
 
   inherit (config.vt-sway) customTarget semanticColors;
