@@ -70,7 +70,7 @@ in
             "${modifier}+x" = "workspace next";
             "${modifier}+grave" = "workspace back_and_forth";
             # Scratchpad terminal shortcut
-            "${modifier}+Shift+Return" = ''exec --no-startup-id ${pkgs.scratchpad-terminal}/bin/scratchpad-terminal ${terminal} "scratchpad_term"'';
+            /* "${modifier}+Shift+Return" = ''exec --no-startup-id ${pkgs.scratchpad-terminal}/bin/scratchpad-terminal ${terminal} "scratchpad_term"''; */
             "${modifier}+Shift+f" = "floating toggle";
             # Launch something in (t)erminal
             "${modifier}+t" = "exec --no-startup-id ${pkgs.bemenu}/bin/bemenu-run --fork --no-exec | ${pkgs.moreutils}/bin/ifne xargs ${terminal}";
