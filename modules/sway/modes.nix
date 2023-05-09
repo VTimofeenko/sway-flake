@@ -36,21 +36,19 @@ let
     normalModeBindings = multiMap normalModeCmd "Back to normal mode" [ "Return" "Escape" ];
   };
 
-  overlay = (import ../../overlay) (pkgs);
-
-  # Color-aware wrapper around the sway-rename-workspace
-  sway-rename-workspace-wrapped = pkgs.writeShellScript "sway-rename-workspace-wrapped" ''
-    export TITLE_FOREGROUND_COLOR="#${semanticColors.defaultBg}"
-    export TITLE_BACKGROUND_COLOR="#${semanticColors.otherSelector}"
-    export HIGHLIGHTED_FOREGROUND_COLOR="#${semanticColors.otherSelector}"
-    ${overlay.sway-rename-workspace}/bin/sway-rename-workspace
-  '';
-  sway-change-workspace-number-wrapped = pkgs.writeShellScript "sway-change-workspace-number-wrapped" ''
-    export TITLE_FOREGROUND_COLOR="#${semanticColors.defaultBg}"
-    export TITLE_BACKGROUND_COLOR="#${semanticColors.otherSelector}"
-    export HIGHLIGHTED_FOREGROUND_COLOR="#${semanticColors.otherSelector}"
-    ${overlay.sway-change-workspace-number}/bin/sway-change-workspace-number
-  '';
+  #   # Color-aware wrapper around the sway-rename-workspace
+  #   sway-rename-workspace-wrapped = pkgs.writeShellScript "sway-rename-workspace-wrapped" ''
+  #     export TITLE_FOREGROUND_COLOR="#${semanticColors.defaultBg}"
+  #     export TITLE_BACKGROUND_COLOR="#${semanticColors.otherSelector}"
+  #     export HIGHLIGHTED_FOREGROUND_COLOR="#${semanticColors.otherSelector}"
+  #     ${overlay.sway-rename-workspace}/bin/sway-rename-workspace
+  #   '';
+  #   sway-change-workspace-number-wrapped = pkgs.writeShellScript "sway-change-workspace-number-wrapped" ''
+  #     export TITLE_FOREGROUND_COLOR="#${semanticColors.defaultBg}"
+  #     export TITLE_BACKGROUND_COLOR="#${semanticColors.otherSelector}"
+  #     export HIGHLIGHTED_FOREGROUND_COLOR="#${semanticColors.otherSelector}"
+  #     ${overlay.sway-change-workspace-number}/bin/sway-change-workspace-number
+  #   '';
 
   inherit (config.vt-sway) customTarget semanticColors;
   modes = {
@@ -80,15 +78,15 @@ let
         } // normalModeBindings;
       };
     };
-    workspace_edit = {
-      name = "workspace_edit";
-      mode = with helpers; {
-        workspace_edit = {
-          "r" = mkBinding "exec --no-startup-id ${sway-rename-workspace-wrapped}; ${normalModeCmd}" "Rename workspace";
-          "n" = mkBinding "exec --no-startup-id ${sway-change-workspace-number-wrapped}; ${normalModeCmd}" "Renumber workspace";
-        } // normalModeBindings;
-      };
-    };
+    /* workspace_edit = { */
+    /*   name = "workspace_edit"; */
+    /*   mode = with helpers; { */
+    /*     workspace_edit = { */
+    /*       "r" = mkBinding "exec --no-startup-id ${sway-rename-workspace-wrapped}; ${normalModeCmd}" "Rename workspace"; */
+    /*       "n" = mkBinding "exec --no-startup-id ${sway-change-workspace-number-wrapped}; ${normalModeCmd}" "Renumber workspace"; */
+    /*     } // normalModeBindings; */
+    /*   }; */
+    /* }; */
     sound_ctl = {
       name = "sound_ctl";
       mode = with helpers; {
