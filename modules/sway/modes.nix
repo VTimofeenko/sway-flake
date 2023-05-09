@@ -120,7 +120,7 @@ in
           "${modifier}+Shift+r" = "${helpers.showHelpNotification resize}; mode ${resize.name}";
           "${modifier}+backslash" = ''${helpers.showHelpNotification exit_ctl}; mode ${exit_ctl.name}'';
           "${modifier}+Ctrl+s" = (mkShowHelpSwitchMode sound_ctl);
-          "${modifier}+Ctrl+w" = (mkShowHelpSwitchMode workspace_edit);
+          # "${modifier}+Ctrl+w" = (mkShowHelpSwitchMode workspace_edit);
         }
       );
     };
