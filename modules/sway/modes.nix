@@ -108,7 +108,8 @@ in
       mkAppendableMode = mode_name: { ${mode_name} = helpers.flattenMode modes.${mode_name}.mode.${mode_name}; };
     in
     {
-      modes = (mkAppendableMode "resize") // (mkAppendableMode "exit_ctl") // (mkAppendableMode "sound_ctl") // (mkAppendableMode "workspace_edit");
+      modes = (mkAppendableMode "resize") // (mkAppendableMode "exit_ctl") // (mkAppendableMode "sound_ctl");
+      # // (mkAppendableMode "workspace_edit");
       keybindings = lib.mkOptionDefault (
         let
           modifier = config.wayland.windowManager.sway.config.modifier;
