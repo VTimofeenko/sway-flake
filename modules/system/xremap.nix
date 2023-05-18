@@ -76,7 +76,7 @@ in
           remap =
             {
               # Copy
-              "SUPER-c" = "C-S-c";
+              "SUPER-c" = "C-Shift-c";
               # Paste
               "SUPER-v" = "Shift-insert";
             };
