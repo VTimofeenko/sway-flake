@@ -16,83 +16,96 @@ in
       ];
       keymap = [
         {
-          name = "Emacs-like shortcuts";
-          application = {
-            "not" = [ "kitty" "Emacs" ];
-          };
-          remap = {
-            "CTRL_L-a" = "home";
-            "CTRL_L-e" = "end";
-            /* Same, but with selection */
-            "CTRL_L-Shift-a" = "Shift-home";
-            "CTRL_L-Shift-e" = "Shift-end";
-            # Select all
-            "ALT_L-a" = "c-a";
-            # Copy
-            "ALT_L-c" = "c-c";
-            # Cut
-            "ALT_L-x" = "c-x";
-            # Undo
-            "ALT_L-z" = "c-z";
-          };
-        }
-        {
-          name = "Make paste by control-shift-v";
-          remap = {
-            "CTRL_L-Shift-v" = "Shift-Insert";
-            "ALT_L-v" = "Shift-Insert";
-          };
-        }
-        {
           name = "Bypass remaps";
-          remap = {
-            "CTRL_L-Shift-Esc" = { escape_next_key = true; };
-          };
+          remap = { "CTRL_L-SHIFT-ESC" = { escape_next_key = true; }; };
         }
         {
-          name = "Right alt + hjkl = arrows";
-          remap = {
-            "ALT_R-h" = "Left";
-            "ALT_R-j" = "Down";
-            "ALT_R-k" = "Up";
-            "ALT_R-l" = "Right";
-            "ALT_R-u" = "Pageup";
-            "ALT_R-d" = "Pagedown";
-          };
+          name = "Emacs-like shortcuts";
+          application =
+            {
+              "not" =
+                [
+                  "kitty"
+                  "Emacs"
+                ];
+            };
+          remap =
+            {
+              "CTRL_L-a" = "home";
+              "CTRL_L-e" = "end";
+              # Same, but select
+              "CTRL_L-Shift-a" = "Shift-home";
+              "CTRL_L-Shift-e" = "Shift-end";
+              "CTRL_L-W" = "C-Backspace";
+            };
         }
         {
-          name = "Make kitty obey alt-c alt-v";
-          application = {
-            "only" = "kitty";
-          };
-          remap = {
-            # Copy
-            "M-c" = "C-Shift-c";
-            # Paste
-            "M-v" = "C-Shift-v";
-          };
+          name = "Global shortcuts";
+          application =
+            {
+              "not" =
+                [
+                  "kitty"
+                  "Emacs"
+                ];
+            };
+          remap =
+            {
+              # Select all
+              "SUPER-a" = "C-a";
+              # Copy
+              "SUPER-c" = "C-c";
+              # Cut
+              "SUPER-x" = "C-x";
+              # Undo
+              "SUPER-z" = "C-z";
+              # Paste
+              "SUPER-v" = "Shift-insert";
+            };
         }
         {
-          # This set of mapping makes ctrl+w work like ctrl+backspace and ctrl+k as ctrl+w
-          name = "Remap browser shortcuts";
-          application = {
-            "only" = [ "Brave-browser" "firefox" ];
-          };
-          remap = {
-            # K = kill
-            "C-Shift-k" = "C-Shift-w";
-            "C-k" = "C-w";
-            "CTRL_L-w" = "C-Backspace";
-          };
+          name = "Global-like shortcuts for terminal and emacs";
+          application =
+            {
+              "only" =
+                [
+                  "kitty"
+                  "Emacs"
+                ];
+            };
+          remap =
+            {
+              # Copy
+              "SUPER-c" = "C-S-c";
+              # Paste
+              "SUPER-v" = "Shift-insert";
+            };
         }
         {
-          name = "Brave fix incognito mode";
-          application = {
-            "only" = "Brave-browser";
-          };
-          remap = {
-            "C-Shift-p" = "C-Shift-n";
-          };
+          name = "Close stuff by super-w";
+          application =
+            {
+              "only" =
+                [
+                  "firefox"
+                  "brave-browser"
+                ];
+            };
+          remap =
+            {
+              "SUPER-w" = "C-w";
+              "SUPER-SHIFT-w" = "C-Shift-w";
+              "SUPER-t" = "C-t";
+              "SUPER-SHIFT-t" = "C-Shift-t";
+            };
+        }
+        {
+          name = "Brave set incognito to a sane shortcut";
+          application = { "only" = "brave-browser"; };
+          remap =
+            {
+              "C-Shift-p" = "C-Shift-n";
+            };
         }
       ];
     };
