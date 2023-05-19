@@ -61,6 +61,8 @@ in
               "SUPER-z" = "C-z";
               # Paste
               "SUPER-v" = "Shift-insert";
+              # Generic "close thing"
+              "SUPER-w" = "C-w";
             };
         }
         {
